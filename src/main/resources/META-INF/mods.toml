@@ -35,3 +35,10 @@ license="${mod_license}"
    versionRange="[10.4.15]"
    ordering="AFTER"
    side="BOTH"
+
+#[[dependencies.${mod_id}]]
+#   modId="evolvedmekanism"
+#   mandatory=false
+#   versionRange="[1.1,)"
+#   ordering="AFTER"
+#   side="BOTH"

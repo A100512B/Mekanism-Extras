@@ -1,11 +1,18 @@
 package com.jerry.mekanism_extras.common.registry;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import com.jerry.mekanism_extras.MekanismExtras;
-import com.jerry.mekanism_extras.api.tier.IAdvanceTier;
+import com.jerry.mekanism_extras.api.tier.IAdvancedTier;
 import com.jerry.mekanism_extras.common.block.ExtraBlockOre;
 import com.jerry.mekanism_extras.common.block.attribute.ExtraAttributeTier;
 import com.jerry.mekanism_extras.common.block.basic.ExtraBlockResource;
-import com.jerry.mekanism_extras.common.tile.machine.ExtraTileEntityElectricPump;
+import com.jerry.mekanism_extras.common.block.prefab.BlockAdvancedFactoryMachine;
+import com.jerry.mekanism_extras.common.content.blocktype.AdvancedFactory;
+import com.jerry.mekanism_extras.common.item.block.machine.ItemBlockAdvancedFactory;
+import com.jerry.mekanism_extras.common.tier.AdvancedFactoryTier;
+import com.jerry.mekanism_extras.common.tile.factory.TileEntityAdvancedFactory;
+import com.jerry.mekanism_extras.common.tile.machine.TileEntityAdvancedElectricPump;
 import com.jerry.mekanism_extras.common.block.basic.ExtraBlockBin;
 import com.jerry.mekanism_extras.common.item.block.ExtraItemBlockBin;
 import com.jerry.mekanism_extras.common.tile.ExtraTileEntityBin;
@@ -39,6 +46,8 @@ import com.jerry.mekanism_extras.common.tile.multiblock.ExtraTileEntityInduction
 import com.jerry.mekanism_extras.common.item.block.ExtraItemBlockInductionProvider;
 import com.jerry.mekanism_extras.common.tile.multiblock.ExtraTileEntityInductionProvider;
 import com.jerry.mekanism_extras.common.util.ExtraEnumUtils;
+//import com.jerry.mekanism_extras.integration.Addons;
+//import fr.iglee42.evolvedmekanism.registries.EMFactoryType;
 import mekanism.api.tier.ITier;
 import mekanism.common.block.attribute.AttributeTier;
 import mekanism.common.block.interfaces.IHasDescription;
@@ -46,6 +55,7 @@ import mekanism.common.block.prefab.BlockBasicMultiblock;
 import mekanism.common.block.prefab.BlockTile;
 import mekanism.common.content.blocktype.BlockType;
 import mekanism.common.content.blocktype.BlockTypeTile;
+import mekanism.common.content.blocktype.FactoryType;
 import mekanism.common.content.blocktype.Machine;
 import mekanism.common.item.block.ItemBlockTooltip;
 import mekanism.common.item.block.machine.ItemBlockMachine;
@@ -53,10 +63,12 @@ import mekanism.common.registration.impl.BlockDeferredRegister;
 import mekanism.common.registration.impl.BlockRegistryObject;
 import mekanism.common.resource.BlockResourceInfo;
 import mekanism.common.tier.*;
+import mekanism.common.util.EnumUtils;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.eventbus.api.IEventBus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -77,7 +89,7 @@ public class ExtraBlock {
     }
 
     private static <BLOCK extends Block, ITEM extends BlockItem> BlockRegistryObject<BLOCK, ITEM> registerTieredBlock_1(BlockType type, String registerName, Function<MapColor, ? extends BLOCK> blockSupplier, Function<BLOCK, ITEM> itemCreator) {
-        IAdvanceTier tier = Objects.requireNonNull(type.get(ExtraAttributeTier.class)).tier();
+        IAdvancedTier tier = Objects.requireNonNull(type.get(ExtraAttributeTier.class)).tier();
         return EXTRA_BLOCK.register(registerName, () -> blockSupplier.apply(tier.getAdvanceTier().getMapColor()), itemCreator);
     }
 
@@ -88,7 +100,22 @@ public class ExtraBlock {
 
     public static final Map<ExtraOreType, ExtraOreBlockType> ORES = new LinkedHashMap<>();
 
+    private static final Table<AdvancedFactoryTier, FactoryType, BlockRegistryObject<BlockAdvancedFactoryMachine.BlockAdvancedFactory<?>, ItemBlockAdvancedFactory>> FACTORIES = HashBasedTable.create();
+
     static {
+        // factories
+        for (AdvancedFactoryTier tier : ExtraEnumUtils.ADVANCED_FACTORY_TIERS) {
+            for (FactoryType type : EnumUtils.FACTORY_TYPES) {
+//                if (Addons.EVOLVEDMEKANISM.isLoaded()) {
+//                    if (type != EMFactoryType.ALLOYING) {
+//                        FACTORIES.put(tier, type, registerFactory(ExtraBlockType.getAdvancedFactory(tier, type)));
+//                    }
+//                } else {
+//                    FACTORIES.put(tier, type, registerFactory(ExtraBlockType.getAdvancedFactory(tier, type)));
+//                }
+                FACTORIES.put(tier, type, registerFactory(ExtraBlockType.getAdvancedFactory(tier, type)));
+            }
+        }
         // ores
         for (ExtraOreType ore : ExtraEnumUtils.ORE_TYPES) {
             ORES.put(ore, registerOre(ore));
@@ -102,8 +129,8 @@ public class ExtraBlock {
     public static final BlockRegistryObject<ExtraBlockBin, ExtraItemBlockBin> COSMIC_BIN = registerBin("cosmic", ExtraBlockType.COSMIC_BIN);
     public static final BlockRegistryObject<ExtraBlockBin, ExtraItemBlockBin> INFINITE_BIN = registerBin("infinite", ExtraBlockType.INFINITE_BIN);
     //induction casing port
-    public static final BlockRegistryObject<BlockBasicMultiblock<ExtraTileEntityInductionCasing>, ItemBlockTooltip<BlockBasicMultiblock<ExtraTileEntityInductionCasing>>> REINFORCED_INDUCTION_CASING = registerBlock("reinforced_induction_casing", () -> new BlockBasicMultiblock<>(ExtraBlockType.INDUCTION_CASING, properties -> properties.mapColor(MapColor.COLOR_LIGHT_GRAY)));
-    public static final BlockRegistryObject<BlockBasicMultiblock<ExtraTileEntityInductionPort>, ItemBlockTooltip<BlockBasicMultiblock<ExtraTileEntityInductionPort>>> REINFORCED_INDUCTION_PORT = registerBlock("reinforced_induction_port", () -> new BlockBasicMultiblock<>(ExtraBlockType.INDUCTION_PORT, properties -> properties.mapColor(MapColor.COLOR_LIGHT_GRAY)));
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityReinforcedInductionCasing>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityReinforcedInductionCasing>>> REINFORCED_INDUCTION_CASING = registerBlock("reinforced_induction_casing", () -> new BlockBasicMultiblock<>(ExtraBlockType.REINFORCED_INDUCTION_CASING, properties -> properties.mapColor(MapColor.COLOR_LIGHT_GRAY)));
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityReinforcedInductionPort>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityReinforcedInductionPort>>> REINFORCED_INDUCTION_PORT = registerBlock("reinforced_induction_port", () -> new BlockBasicMultiblock<>(ExtraBlockType.REINFORCED_INDUCTION_PORT, properties -> properties.mapColor(MapColor.COLOR_LIGHT_GRAY)));
     //cell
     public static final BlockRegistryObject<BlockTile<ExtraTileEntityInductionCell, BlockTypeTile<ExtraTileEntityInductionCell>>, ExtraItemBlockInductionCell> ABSOLUTE_INDUCTION_CELL = registerInductionCell("absolute", ExtraBlockType.ABSOLUTE_INDUCTION_CELL);
     public static final BlockRegistryObject<BlockTile<ExtraTileEntityInductionCell, BlockTypeTile<ExtraTileEntityInductionCell>>, ExtraItemBlockInductionCell> SUPREME_INDUCTION_CELL = registerInductionCell("supreme", ExtraBlockType.SUPREME_INDUCTION_CELL);
@@ -156,7 +183,7 @@ public class ExtraBlock {
     public static final BlockRegistryObject<BlockTile.BlockTileModel<ExtraTileEntityChemicalTank, Machine<ExtraTileEntityChemicalTank>>, ExtraItemBlockChemicalTank> INFINITE_CHEMICAL_TANK = registerChemicalTank("infinite", ExtraBlockType.INFINITE_CHEMICAL_TANK);
     //other
     public static final BlockRegistryObject<ExtraBlockRadioactiveWasteBarrel, ExtraItemBlockRadioactiveWasteBarrel> EXPAND_RADIOACTIVE_WASTE_BARREL = EXTRA_BLOCK.registerDefaultProperties("expand_radioactive_waste_barrel", ExtraBlockRadioactiveWasteBarrel::new, ExtraItemBlockRadioactiveWasteBarrel::new);
-    public static final BlockRegistryObject<BlockTile.BlockTileModel<ExtraTileEntityElectricPump, Machine<ExtraTileEntityElectricPump>>, ItemBlockMachine> ADVANCE_ELECTRIC_PUMP = EXTRA_BLOCK.register("advance_electric_pump", () -> new BlockTile.BlockTileModel<>(ExtraBlockType.ADVANCE_ELECTRIC_PUMP, properties -> properties.mapColor(BlockResourceInfo.STEEL.getMapColor())), ItemBlockMachine::new);
+    public static final BlockRegistryObject<BlockTile.BlockTileModel<TileEntityAdvancedElectricPump, Machine<TileEntityAdvancedElectricPump>>, ItemBlockMachine> ADVANCED_ELECTRIC_PUMP = EXTRA_BLOCK.register("advance_electric_pump", () -> new BlockTile.BlockTileModel<>(ExtraBlockType.ADVANCED_ELECTRIC_PUMP, properties -> properties.mapColor(BlockResourceInfo.STEEL.getMapColor())), ItemBlockMachine::new);
 
     private static ExtraOreBlockType registerOre(ExtraOreType ore) {
         String name = ore.getResource().getRegistrySuffix() + "_ore";
@@ -218,6 +245,38 @@ public class ExtraBlock {
 
     private static <BLOCK extends Block & IHasDescription> BlockRegistryObject<BLOCK, ItemBlockTooltip<BLOCK>> registerBlock(String name, Supplier<? extends BLOCK> blockSupplier) {
         return EXTRA_BLOCK.registerDefaultProperties(name, blockSupplier, ItemBlockTooltip::new);
+    }
+
+    private static <TILE extends TileEntityAdvancedFactory<?>> BlockRegistryObject<BlockAdvancedFactoryMachine.BlockAdvancedFactory<?>, ItemBlockAdvancedFactory> registerFactory(AdvancedFactory<TILE> type) {
+        IAdvancedTier tier = Objects.requireNonNull(type.get(ExtraAttributeTier.class)).tier();
+        return registerTieredBlock(type, "_" + type.getFactoryType().getRegistryNameComponent() + "_factory", () -> new BlockAdvancedFactoryMachine.BlockAdvancedFactory<>(type), ItemBlockAdvancedFactory::new);
+    }
+
+    private static <BLOCK extends Block, ITEM extends BlockItem> BlockRegistryObject<BLOCK, ITEM> registerTieredBlock(BlockType type, String suffix,
+                                                                                                                      Supplier<? extends BLOCK> blockSupplier, Function<BLOCK, ITEM> itemCreator) {
+        return registerTieredBlock(Objects.requireNonNull(type.get(ExtraAttributeTier.class)).tier(), suffix, blockSupplier, itemCreator);
+    }
+
+    private static <BLOCK extends Block, ITEM extends BlockItem> BlockRegistryObject<BLOCK, ITEM> registerTieredBlock(IAdvancedTier tier, String suffix,
+                                                                                                                      Supplier<? extends BLOCK> blockSupplier, Function<BLOCK, ITEM> itemCreator) {
+        return EXTRA_BLOCK.register(tier.getAdvanceTier().getLowerName() + suffix, blockSupplier, itemCreator);
+    }
+
+    /**
+     * Retrieves a Factory with a defined tier and recipe type.
+     *
+     * @param tier - tier to add to the Factory
+     * @param type - recipe type to add to the Factory
+     *
+     * @return factory with defined tier and recipe type
+     */
+    public static BlockRegistryObject<BlockAdvancedFactoryMachine.BlockAdvancedFactory<?>, ItemBlockAdvancedFactory> getAdvancedFactory(@NotNull AdvancedFactoryTier tier, @NotNull FactoryType type) {
+        return FACTORIES.get(tier, type);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static BlockRegistryObject<BlockAdvancedFactoryMachine.BlockAdvancedFactory<?>, ItemBlockAdvancedFactory>[] getAdvancedFactoryBlocks() {
+        return FACTORIES.values().toArray(new BlockRegistryObject[0]);
     }
 
     public static void register(IEventBus eventBus) {

@@ -2,16 +2,24 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.jerry.mekanism_extras.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "refmap": "Mekanism_Extras.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "mekanism_extras.refmap.json",
   "mixins": [
+    "MixinAPILang",
     "MixinBinInventorySlot",
+    "MixinBlockEnergyCube",
+    "MixinFactory",
     "MixinGeneratorsPacketHandler",
     "MixinLogisticalTransporterBase",
+    "MixinMachineEnergyContainer",
+    "MixinMekanismBlockTypes",
     "MixinPacketHandler",
+    "MixinTileComponentEjector",
     "MixinTileEntityLogisticalSorter",
     "MixinTurbineGasTank",
-    "MixinTurbineMultiblockData"
+    "MixinTurbineMultiblockData",
+    "MixinUpgrade",
+    "MixinUpgradeUtils"
   ],
   "client": [
   ],

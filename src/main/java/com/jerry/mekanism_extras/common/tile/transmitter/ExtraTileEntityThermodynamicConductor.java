@@ -1,6 +1,6 @@
 package com.jerry.mekanism_extras.common.tile.transmitter;
 
-import com.jerry.mekanism_extras.api.tier.AdvanceTier;
+import com.jerry.mekanism_extras.api.tier.AdvancedTier;
 import com.jerry.mekanism_extras.common.content.network.transmitter.ExtraThermodynamicConductor;
 import com.jerry.mekanism_extras.common.registry.ExtraBlock;
 import mekanism.api.heat.IHeatCapacitor;
@@ -66,12 +66,13 @@ public class ExtraTileEntityThermodynamicConductor extends ExtraTileEntityTransm
 
     @NotNull
     @Override
-    protected BlockState upgradeResult(@NotNull BlockState current, @NotNull AdvanceTier tier) {
+    protected BlockState upgradeResult(@NotNull BlockState current, @NotNull AdvancedTier tier) {
         return BlockStateHelper.copyStateData(current, switch (tier) {
             case ABSOLUTE -> ExtraBlock.ABSOLUTE_THERMODYNAMIC_CONDUCTOR;
             case SUPREME -> ExtraBlock.SUPREME_THERMODYNAMIC_CONDUCTOR;
             case COSMIC -> ExtraBlock.COSMIC_THERMODYNAMIC_CONDUCTOR;
             case INFINITE -> ExtraBlock.INFINITE_THERMODYNAMIC_CONDUCTOR;
+            default -> null;
         });
     }
 

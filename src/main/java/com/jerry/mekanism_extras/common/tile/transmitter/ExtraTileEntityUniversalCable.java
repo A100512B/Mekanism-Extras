@@ -1,6 +1,6 @@
 package com.jerry.mekanism_extras.common.tile.transmitter;
 
-import com.jerry.mekanism_extras.api.tier.AdvanceTier;
+import com.jerry.mekanism_extras.api.tier.AdvancedTier;
 import com.jerry.mekanism_extras.common.content.network.transmitter.ExtraUniversalCable;
 import com.jerry.mekanism_extras.common.registry.ExtraBlock;
 import mekanism.api.NBTConstants;
@@ -69,12 +69,13 @@ public class ExtraTileEntityUniversalCable extends ExtraTileEntityTransmitter im
 
     @NotNull
     @Override
-    protected BlockState upgradeResult(@NotNull BlockState current, @NotNull AdvanceTier tier) {
+    protected BlockState upgradeResult(@NotNull BlockState current, @NotNull AdvancedTier tier) {
         return BlockStateHelper.copyStateData(current, switch (tier) {
             case ABSOLUTE -> ExtraBlock.ABSOLUTE_UNIVERSAL_CABLE;
             case SUPREME -> ExtraBlock.SUPREME_UNIVERSAL_CABLE;
             case COSMIC -> ExtraBlock.COSMIC_UNIVERSAL_CABLE;
             case INFINITE -> ExtraBlock.INFINITE_UNIVERSAL_CABLE;
+            default -> null;
         });
     }
 
