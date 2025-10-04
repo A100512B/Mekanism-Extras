@@ -216,6 +216,7 @@ public class PlasmaEvaporationMultiblockData
         NBTUtils.setIntIfPresent(tag, ExtraNBTConstants.HIGHER_VOLUME, value -> higherVolume = value);
         NBTUtils.setDoubleIfPresent(tag, NBTConstants.LAST_PROCESSED, value -> lastProcessed = value);
         NBTUtils.setDoubleIfPresent(tag, ExtraNBTConstants.LAST_PLASMA_CONSUMPTION, value -> lastPlasmaConsumption = value);
+        NBTUtils.setIntIfPresent(tag, ExtraNBTConstants.INSULATION_LAYER_Y, value -> insulationLayerY = value);
         readValves(tag);
     }
 
@@ -230,6 +231,7 @@ public class PlasmaEvaporationMultiblockData
         tag.putInt(ExtraNBTConstants.HIGHER_VOLUME, higherVolume);
         tag.putDouble(NBTConstants.LAST_PROCESSED, lastProcessed);
         tag.putDouble(ExtraNBTConstants.LAST_PLASMA_CONSUMPTION, lastPlasmaConsumption);
+        tag.putInt(ExtraNBTConstants.INSULATION_LAYER_Y, insulationLayerY);
         writeValves(tag);
     }
 
