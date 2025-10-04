@@ -9,8 +9,6 @@ import com.jerry.mekanism_extras.api.gas.attribute.ExtraGasAttributes.*;
 import mekanism.api.Action;
 import mekanism.api.Coord4D;
 import mekanism.api.NBTConstants;
-import mekanism.api.chemical.BasicChemicalTank;
-import mekanism.api.chemical.ChemicalTankBuilder;
 import mekanism.api.chemical.attribute.ChemicalAttributeValidator;
 import mekanism.api.chemical.gas.Gas;
 import mekanism.api.chemical.gas.IGasTank;
@@ -35,7 +33,6 @@ import mekanism.common.integration.computer.SpecialComputerMethodWrapper;
 import mekanism.common.integration.computer.annotation.SyntheticComputerMethod;
 import mekanism.common.integration.computer.annotation.WrappingComputerMethod;
 import mekanism.common.inventory.container.sync.dynamic.ContainerSync;
-import mekanism.common.lib.multiblock.IMultiblock;
 import mekanism.common.lib.multiblock.IValveHandler;
 import mekanism.common.lib.multiblock.MultiblockData;
 import mekanism.common.recipe.IMekanismRecipeTypeProvider;
@@ -56,7 +53,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.BiPredicate;
 import java.util.function.BooleanSupplier;
 
 public class PlasmaEvaporationMultiblockData
@@ -91,7 +87,7 @@ public class PlasmaEvaporationMultiblockData
     public float prevScale;
     @ContainerSync
     @SyntheticComputerMethod(getter = "getProductionAmount")
-    public double lastGain;
+    public double lastProcessed;
     @ContainerSync
     @SyntheticComputerMethod(getter = "getPlasmaConsumption")
     public double lastPlasmaConsumption;
@@ -193,9 +189,10 @@ public class PlasmaEvaporationMultiblockData
             idle();
         }
         // We should cool down the plant based on how much fluid is processed
-        heatCapacitor.handleHeat(-lastGain * GenLoadConfig.generatorConfig.plasmaEvaporationHeatPerInputFluid.get());
+        heatCapacitor.handleHeat(-lastProcessed * GenLoadConfig.generatorConfig.plasmaEvaporationHeatPerInputFluid.get());
         // After we update the heat capacitors, update our temperature multiplier
-        tempMultiplier = getTemperature() * GenLoadConfig.generatorConfig.plasmaEvaporationTempMultiplier.get() *
+        tempMultiplier = (getTemperature() - GenLoadConfig.generatorConfig.plasmaEvaporationMinRequiredTemperature.get()) *
+                GenLoadConfig.generatorConfig.plasmaEvaporationTempMultiplier.get() *
                 ((double) height() / MAX_HEIGHT);
 //        inputOutputSlot.drainTank(outputOutputSlot);
 //        inputInputSlot.fillTank(outputInputSlot);
@@ -217,6 +214,8 @@ public class PlasmaEvaporationMultiblockData
         NBTUtils.setGasStackIfPresent(tag, NBTConstants.GAS_STORED_ALT, gas -> plasmaOutputTank.setStack(gas));
         NBTUtils.setIntIfPresent(tag, NBTConstants.LOWER_VOLUME, value -> lowerVolume = value);
         NBTUtils.setIntIfPresent(tag, ExtraNBTConstants.HIGHER_VOLUME, value -> higherVolume = value);
+        NBTUtils.setDoubleIfPresent(tag, NBTConstants.LAST_PROCESSED, value -> lastProcessed = value);
+        NBTUtils.setDoubleIfPresent(tag, ExtraNBTConstants.LAST_PLASMA_CONSUMPTION, value -> lastPlasmaConsumption = value);
         readValves(tag);
     }
 
@@ -229,6 +228,8 @@ public class PlasmaEvaporationMultiblockData
         tag.put(NBTConstants.GAS_STORED_ALT, plasmaOutputTank.getStack().write(new CompoundTag()));
         tag.putInt(NBTConstants.LOWER_VOLUME, lowerVolume);
         tag.putInt(ExtraNBTConstants.HIGHER_VOLUME, higherVolume);
+        tag.putDouble(NBTConstants.LAST_PROCESSED, lastProcessed);
+        tag.putDouble(ExtraNBTConstants.LAST_PLASMA_CONSUMPTION, lastPlasmaConsumption);
         writeValves(tag);
     }
 
@@ -270,13 +271,13 @@ public class PlasmaEvaporationMultiblockData
                     // amount
                     if (active) {
                         if (tempMultiplier > 0 && tempMultiplier < 1) {
-                            lastGain = 1F / (int) Math.ceil(1 / tempMultiplier);
+                            lastProcessed = 1F / (int) Math.ceil(1 / tempMultiplier);
                         } else {
-                            lastGain = tempMultiplier;
+                            lastProcessed = tempMultiplier;
                         }
-                        lastPlasmaConsumption = lastGain / GenLoadConfig.generatorConfig.plasmaEvaporationPlasmaConsumeRatio.get();
+                        lastPlasmaConsumption = lastProcessed / GenLoadConfig.generatorConfig.plasmaEvaporationPlasmaConsumeRatio.get();
                     } else {
-                        lastGain = 0;
+                        lastProcessed = 0;
                         lastPlasmaConsumption = 0;
                     }
                 })
@@ -372,13 +373,17 @@ public class PlasmaEvaporationMultiblockData
 
     private void idle() {
         if (!GenLoadConfig.generatorConfig.plasmaEvaporationIdleHeatDissipationEnabled.get()) return;
-        if (getTemperature() <= 1_000) return;
+        if (getTemperature() <= GenLoadConfig.generatorConfig.plasmaEvaporationMinRequiredTemperature.get()) return;
         heatCapacitor.handleHeat(-GenLoadConfig.generatorConfig.plasmaEvaporationIdleHeatDissipation.get());
     }
 
     public void updateVentData(List<VentData> vents) {
         this.ventData = vents;
         this.vents = this.ventData.size();
+    }
+
+    public boolean handlesSound(TileEntityPlasmaEvaporationBlock tile) {
+        return getBounds().isOnCorner(tile.getBlockPos());
     }
 
     @Override

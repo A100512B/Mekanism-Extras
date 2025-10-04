@@ -64,16 +64,19 @@ public class ExtraGenBlockTypes {
     // Plasma Evaporation Block
     public static final BlockTypeTile<TileEntityPlasmaEvaporationBlock> PLASMA_EVAPORATION_BLOCK = BlockTypeTile.BlockTileBuilder
             .createBlock(() -> ExtraGenTileEntityTypes.PLASMA_EVAPORATION_BLOCK, ExtraGenLang.DESCRIPTION_PLASMA_EVAPORATION_BLOCK)
+            .withSound(ExtraGenSounds.PLASMA_EVAPORATION)
             .externalMultiblock()
             .build();
     public static final BlockTypeTile<TileEntityPlasmaEvaporationController> PLASMA_EVAPORATION_CONTROLLER = BlockTypeTile.BlockTileBuilder
             .createBlock(() -> ExtraGenTileEntityTypes.PLASMA_EVAPORATION_CONTROLLER, ExtraGenLang.DESCRIPTION_PLASMA_EVAPORATION_CONTROLLER)
             .withGui(() -> ExtraGenContainerTypes.PLASMA_EVAPORATION_CONTROLLER, ExtraGenLang.PLASMA_EVAPORATION)
+            .withSound(ExtraGenSounds.PLASMA_EVAPORATION)
             .with(Attributes.INVENTORY, Attributes.ACTIVE, new AttributeStateFacing(), new AttributeCustomResistance(18))
             .externalMultiblock()
             .build();
     public static final BlockTypeTile<TileEntityPlasmaEvaporationValve> PLASMA_EVAPORATION_VALVE = BlockTypeTile.BlockTileBuilder
             .createBlock(() -> ExtraGenTileEntityTypes.PLASMA_EVAPORATION_VALVE, ExtraGenLang.DESCRIPTION_PLASMA_EVAPORATION_VALVE)
+            .withSound(ExtraGenSounds.PLASMA_EVAPORATION)
             .with(Attributes.COMPARATOR, new AttributeCustomResistance(18), Attributes.ACTIVE)
             .externalMultiblock()
             .build();
@@ -83,6 +86,7 @@ public class ExtraGenBlockTypes {
             .build();
     public static final BlockTypeTile<TileEntityPlasmaEvaporationVent> PLASMA_EVAPORATION_VENT = BlockTypeTile.BlockTileBuilder
             .createBlock(() -> ExtraGenTileEntityTypes.PLASMA_EVAPORATION_VENT, ExtraGenLang.DESCRIPTION_PLASMA_EVAPORATION_VENT)
+            .withSound(ExtraGenSounds.PLASMA_EVAPORATION)
             .externalMultiblock()
             .build();
     public static final BlockTypeTile<TileEntityFusionReactorPlasmaExtractingPort> FUSION_REACTOR_PLASMA_EXTRACTING_PORT = BlockTypeTile.BlockTileBuilder

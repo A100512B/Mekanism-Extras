@@ -1,0 +1,8 @@
+{
+  "tile.machine.plasma_evaporation": {
+    "sounds": [
+      "mekanism_extras:plasma_evaporation"
+    ],
+    "subtitle": "sound_event.mekanism_extras.tile.machine.plasma_evaporation"
+  }
+}

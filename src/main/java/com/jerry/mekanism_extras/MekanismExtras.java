@@ -107,6 +107,7 @@ public class MekanismExtras implements IModModule {
             ExtraGenGases.register(modEventBus);
             ExtraGenInfuseTypes.register(modEventBus);
             ExtraGenTileEntityTypes.register(modEventBus);
+            ExtraGenSounds.register(modEventBus);
 //            ExtraGenRecipeType.EXTRA_GEN_RECIPE_TYPES.register(modEventBus);
 //            ExtraGenRecipeSerializers.GEN_RECIPE_SERIALIZERS.register(modEventBus);
         }

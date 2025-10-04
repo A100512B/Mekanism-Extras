@@ -39,6 +39,7 @@ public class GeneratorConfig extends BaseMekanismConfig {
     public final CachedIntValue plasmaEvaporationHeatPerInputFluid;
     public final CachedBooleanValue plasmaEvaporationIdleHeatDissipationEnabled;
     public final CachedIntValue plasmaEvaporationIdleHeatDissipation;
+    public final CachedDoubleValue plasmaEvaporationMinRequiredTemperature;
 
     public GeneratorConfig() {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -94,6 +95,8 @@ public class GeneratorConfig extends BaseMekanismConfig {
                 .define("idleHeatDissipationEnabled", true));
         plasmaEvaporationIdleHeatDissipation = CachedIntValue.wrap(this, builder.comment("Heat dissipation while the Plasma Evaporation Plant is idle. Setting this to 0 has the same effect as disabling heat dissipation.")
                 .defineInRange("idleHeatDissipation", 10000, 0, 1_000_000));
+        plasmaEvaporationMinRequiredTemperature = CachedDoubleValue.wrap(this, builder.comment("Minimum temperature required by Plamsa Evaporation Plant to work.")
+                .defineInRange("minRequiredTemperature", 1_000, 0D, Double.MAX_VALUE));
         builder.pop();
 
         this.configSpec = builder.build();

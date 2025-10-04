@@ -49,7 +49,7 @@ public class GuiPlasmaEvaporationController extends GuiMekanismTile<TileEntityPl
                 MekanismLang.MULTIBLOCK_FORMED.translate(),
                 MekanismLang.EVAPORATION_HEIGHT.translate(multiblock.height()),
                 MekanismLang.TEMPERATURE.translate(MekanismUtils.getTemperatureDisplay(multiblock.getTemperature(), TemperatureUnit.KELVIN, true)),
-                MekanismLang.FLUID_PRODUCTION.translate(Math.round(multiblock.lastGain * 100D) / 100D),
+                MekanismLang.FLUID_PRODUCTION.translate(Math.round(multiblock.lastProcessed * 100D) / 100D),
                 ExtraGenLang.PLASMA_CONSUMPTION.translate(Math.round(multiblock.lastPlasmaConsumption * 100D) / 100D)))
                 .spacing(1).jeiCategory(tile));
 

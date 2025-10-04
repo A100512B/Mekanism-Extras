@@ -313,5 +313,7 @@
   "info.mekanism_extras.jei.rich_uranium_fuel": "Rich Uranium Fuel can be extracted from a Uranium Hexafluoride source block via an advance electric pump with a ionic membrane upgrade installed.",
   "info.mekanism_extras.jei.polonium_containing_solution": "When coolant is injected into a Naquadah Reactor, the generated steam will capture polonium-208 that does not decay in the reactor, resulting in polonium containing steam.",
 
-  "chemical.mekanism_extras.attribute.heatant": " - Heat Per 10,000 mB: %1$s"
+  "chemical.mekanism_extras.attribute.heatant": " - Heat Per 10,000 mB: %1$s",
+
+  "sound_event.mekanism_extras.tile.machine.plasma_evaporation": "Fluid is being evaporated by plasma"
 }
