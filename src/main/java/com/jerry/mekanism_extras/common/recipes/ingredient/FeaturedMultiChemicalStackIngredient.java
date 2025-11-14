@@ -47,6 +47,13 @@ public abstract class FeaturedMultiChemicalStackIngredient<CHEMICAL extends Chem
     protected abstract ChemicalIngredientInfo<CHEMICAL, STACK> getIngredientInfo();
 
     @Override
+    public boolean handleable() {
+        return forEachIngredient(i -> i instanceof SingleChemicalStackIngredient ||
+                i instanceof TaggedChemicalStackIngredient ||
+                i instanceof MultiChemicalStackIngredient);
+    }
+
+    @Override
     public boolean forEachIngredient(Predicate<INGREDIENT> checker) {
         if (ingredient instanceof SingleChemicalStackIngredient || ingredient instanceof TaggedChemicalStackIngredient) {
             return checker.test(ingredient);

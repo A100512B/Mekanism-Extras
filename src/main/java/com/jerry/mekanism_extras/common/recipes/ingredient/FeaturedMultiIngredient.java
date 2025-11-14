@@ -18,6 +18,8 @@ import java.util.function.Function;
 public interface FeaturedMultiIngredient<TYPE, INGREDIENT extends InputIngredient<@NotNull TYPE>>
         extends IMultiIngredient<TYPE, INGREDIENT> {
 
+    boolean handleable();
+
     boolean hasFeature(long mask);
 
     default boolean hasFeature(Feature<?> feature) {

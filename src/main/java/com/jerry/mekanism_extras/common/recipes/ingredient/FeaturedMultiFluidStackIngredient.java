@@ -32,6 +32,13 @@ public class FeaturedMultiFluidStackIngredient
     }
 
     @Override
+    public boolean handleable() {
+        return forEachIngredient(i -> i instanceof SingleFluidStackIngredient ||
+                i instanceof TaggedFluidStackIngredient ||
+                i instanceof MultiFluidStackIngredient);
+    }
+
+    @Override
     public boolean forEachIngredient(Predicate<FluidStackIngredient> checker) {
         if (isIngredientSingle(ingredient)) {
             return checker.test(ingredient);

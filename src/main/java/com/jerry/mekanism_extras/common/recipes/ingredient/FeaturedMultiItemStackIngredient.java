@@ -6,6 +6,7 @@ import mekanism.common.recipe.ingredient.creator.ItemStackIngredientCreator.Mult
 import mekanism.common.recipe.ingredient.creator.ItemStackIngredientCreator.SingleItemStackIngredient;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.crafting.StrictNBTIngredient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -20,6 +21,7 @@ public class FeaturedMultiItemStackIngredient
     private final long featureMask;
     @Unmodifiable
     private final List<Feature<?>> features;
+    private final boolean nbtSensitive; // cache value
 
     FeaturedMultiItemStackIngredient(ItemStackIngredient ingredient, Feature<?>... features) {
         this.ingredient = ingredient;
@@ -28,6 +30,17 @@ public class FeaturedMultiItemStackIngredient
                 .map(Feature::getMask)
                 .reduce((l1, l2) -> l1 | l2)
                 .orElse(0L);
+        this.nbtSensitive = ingredient instanceof SingleItemStackIngredient ?
+                ((SingleItemStackIngredient) ingredient).getInputRaw() instanceof StrictNBTIngredient :
+                ((MultiItemStackIngredient) ingredient).forEachIngredient(
+                        i -> ((SingleItemStackIngredient) i).getInputRaw() instanceof StrictNBTIngredient
+                );
+    }
+
+    @Override
+    public boolean handleable() {
+        return forEachIngredient(i -> i instanceof SingleItemStackIngredient ||
+                i instanceof MultiItemStackIngredient);
     }
 
     @Override
@@ -102,5 +115,9 @@ public class FeaturedMultiItemStackIngredient
         return features.stream()
                 .filter(feature -> Objects.equals(feature.getId(), id))
                 .findFirst();
+    }
+
+    public boolean isNbtSensitive() {
+        return nbtSensitive;
     }
 }
