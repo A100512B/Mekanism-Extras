@@ -1,4 +1,4 @@
-package com.jerry.mekanism_extras.common.registry;
+package com.jerry.mekanism_extras.common.registries;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -17,9 +17,10 @@ import com.jerry.mekanism_extras.common.tile.ExtraTileEntityChemicalTank;
 import com.jerry.mekanism_extras.common.tile.ExtraTileEntityEnergyCube;
 import com.jerry.mekanism_extras.common.tile.ExtraTileEntityFluidTank;
 import com.jerry.mekanism_extras.common.tile.ExtraTileEntityRadioactiveWasteBarrel;
-import com.jerry.mekanism_extras.common.tile.multiblock.*;
-import com.jerry.mekanism_extras.common.tile.multiblock.ExtraTileEntityInductionCell;
-import com.jerry.mekanism_extras.common.tile.multiblock.ExtraTileEntityInductionProvider;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.ExtraTileEntityInductionCell;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.ExtraTileEntityInductionProvider;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.TileEntityReinforcedInductionCasing;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.TileEntityReinforcedInductionPort;
 import com.jerry.mekanism_extras.common.util.ExtraEnumUtils;
 import com.jerry.mekanism_extras.common.util.ExtraFloatingLong;
 import fr.iglee42.evolvedmekanism.registries.EMFactoryType;

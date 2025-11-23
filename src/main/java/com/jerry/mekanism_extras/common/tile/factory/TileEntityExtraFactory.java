@@ -3,8 +3,8 @@ package com.jerry.mekanism_extras.common.tile.factory;
 import com.jerry.mekanism_extras.api.ExtraUpgrade;
 import com.jerry.mekanism_extras.api.IMixinMachineEnergyContainer;
 import com.jerry.mekanism_extras.common.block.attribute.ExtraAttribute;
-import com.jerry.mekanism_extras.common.registry.ExtraBlockType;
-import com.jerry.mekanism_extras.common.registry.ExtraTileEntityTypes;
+import com.jerry.mekanism_extras.common.registries.ExtraBlockType;
+import com.jerry.mekanism_extras.common.registries.ExtraTileEntityTypes;
 import com.jerry.mekanism_extras.common.util.ExtraEnumUtils;
 import com.jerry.mekanism_extras.common.util.ExtraUpgradeUtils;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
@@ -431,7 +431,7 @@ public abstract class TileEntityExtraFactory<RECIPE extends MekanismRecipe> exte
     @Override
     public List<Component> getInfo(@NotNull Upgrade upgrade) {
         List<Component> ret = UpgradeUtils.getMultScaledInfo(this, upgrade);
-        return ExtraUpgradeUtils.getMultScaledInfo(ret, this, upgrade);
+        return ExtraUpgradeUtils.getMultiScaledInfo(ret, this, upgrade);
     }
 
     @Override

@@ -1,9 +1,9 @@
-package com.jerry.mekanism_extras.common.tile.multiblock;
+package com.jerry.mekanism_extras.common.tile.multiblock.matrix;
 
 import com.jerry.mekanism_extras.MekanismExtras;
 import com.jerry.mekanism_extras.common.content.matrix.ExtraMatrixMultiblockData;
-import com.jerry.mekanism_extras.common.registry.ExtraBlock;
-import com.jerry.mekanism_extras.common.registry.ExtraContainerTypes;
+import com.jerry.mekanism_extras.common.registries.ExtraBlock;
+import com.jerry.mekanism_extras.common.registries.ExtraContainerTypes;
 import mekanism.api.providers.IBlockProvider;
 import mekanism.common.inventory.container.MekanismContainer;
 import mekanism.common.inventory.container.sync.dynamic.SyncMapper;

@@ -15,6 +15,7 @@
     "MixinMachineEnergyContainer",
     "MixinMekanismBlockTypes",
     "MixinMekanismJEIRecipeType",
+    "MixinMekanismRecipeType",
     "MixinPacketHandler",
     "MixinTileComponentEjector",
     "MixinTileEntityLogisticalSorter",

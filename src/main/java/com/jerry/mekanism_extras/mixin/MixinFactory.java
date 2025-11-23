@@ -1,7 +1,7 @@
 package com.jerry.mekanism_extras.mixin;
 
 import com.jerry.mekanism_extras.common.block.attribute.ExtraAttributeUpgradeable;
-import com.jerry.mekanism_extras.common.registry.ExtraBlock;
+import com.jerry.mekanism_extras.common.registries.ExtraBlock;
 import com.jerry.mekanism_extras.common.tier.AdvancedFactoryTier;
 import mekanism.api.text.ILangEntry;
 import mekanism.common.content.blocktype.BlockType;

@@ -22,7 +22,7 @@ public class FeaturedMultiFluidStackIngredient
     @Unmodifiable
     private final List<Feature<?>> features;
 
-    FeaturedMultiFluidStackIngredient(FluidStackIngredient ingredient, Feature<?>... features) {
+    public FeaturedMultiFluidStackIngredient(FluidStackIngredient ingredient, Feature<?>... features) {
         this.ingredient = ingredient;
         this.features = Arrays.stream(features).toList();
         this.featureMask = this.features.stream()
@@ -79,7 +79,7 @@ public class FeaturedMultiFluidStackIngredient
     @Override
     public void write(FriendlyByteBuf buffer) {
         ingredient.write(buffer);
-        FeatureNetworkHandler.writeFeatures(buffer, features.toArray(Feature[]::new));
+        FeatureNetworkHandler.write(buffer, features.toArray(Feature[]::new));
     }
 
     @Override

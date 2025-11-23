@@ -121,7 +121,7 @@ public interface FeaturedMultiIngredient<TYPE, INGREDIENT extends InputIngredien
          * @param features The given features. Should not contain features
          *                 of the same type, though not explicitly checked.
          */
-        public static void writeFeatures(FriendlyByteBuf buf, Feature<?>... features) {
+        public static void write(FriendlyByteBuf buf, Feature<?>... features) {
             long mask = Arrays.stream(features)
                     .map(Feature::getMask)
                     .reduce((i1, i2) -> i1 | i2)
@@ -140,7 +140,7 @@ public interface FeaturedMultiIngredient<TYPE, INGREDIENT extends InputIngredien
          * @param buf The buffer.
          * @return The unmodifiable list of features. May be empty.
          */
-        public static List<Feature<?>> readFeatures(FriendlyByteBuf buf) {
+        public static List<Feature<?>> read(FriendlyByteBuf buf) {
             long mask = buf.readLong();
             if (mask == 0L) return List.of();
 

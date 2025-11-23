@@ -2,8 +2,8 @@ package com.jerry.generator_extras.common.genregistry;
 
 import com.jerry.mekanism_extras.MekanismExtras;
 import com.jerry.mekanism_extras.api.gas.attribute.ExtraGasAttributes.*;
-import com.jerry.mekanism_extras.common.registry.ExtraChemicalConstants;
-import com.jerry.mekanism_extras.common.registry.ExtraGases;
+import com.jerry.mekanism_extras.common.registries.ExtraChemicalConstants;
+import com.jerry.mekanism_extras.common.registries.ExtraGases;
 import mekanism.api.chemical.gas.Gas;
 import mekanism.api.chemical.gas.attribute.GasAttributes.*;
 import mekanism.common.registration.impl.GasDeferredRegister;

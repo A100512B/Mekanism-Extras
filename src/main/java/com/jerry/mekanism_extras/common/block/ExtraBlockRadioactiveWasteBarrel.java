@@ -1,7 +1,7 @@
 package com.jerry.mekanism_extras.common.block;
 
 import com.jerry.mekanism_extras.common.tile.ExtraTileEntityRadioactiveWasteBarrel;
-import com.jerry.mekanism_extras.common.registry.ExtraBlockType;
+import com.jerry.mekanism_extras.common.registries.ExtraBlockType;
 import mekanism.api.chemical.gas.GasStack;
 import mekanism.api.text.EnumColor;
 import mekanism.common.MekanismLang;

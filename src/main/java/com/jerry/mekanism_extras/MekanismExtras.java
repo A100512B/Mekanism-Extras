@@ -14,7 +14,7 @@ import com.jerry.generator_extras.common.content.naquadah.NaquadahReactorMultibl
 import com.jerry.generator_extras.common.content.naquadah.NaquadahReactorValidator;
 import com.jerry.mekanism_extras.common.content.matrix.ExtraMatrixMultiblockData;
 import com.jerry.mekanism_extras.common.content.matrix.ExtraMatrixValidator;
-import com.jerry.mekanism_extras.common.registry.*;
+import com.jerry.mekanism_extras.common.registries.*;
 import com.jerry.mekanism_extras.common.integration.Addons;
 import com.mojang.logging.LogUtils;
 import mekanism.common.base.IModModule;
@@ -49,7 +49,7 @@ import java.nio.file.Path;
 public class MekanismExtras implements IModModule {
     public static final String MODID = "mekanism_extras";
     public static final String MOD_NAME = "MekanismExtras";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
     /**
      * Mekanism Extras version number
      */
@@ -108,8 +108,6 @@ public class MekanismExtras implements IModModule {
             ExtraGenInfuseTypes.register(modEventBus);
             ExtraGenTileEntityTypes.register(modEventBus);
             ExtraGenSounds.register(modEventBus);
-//            ExtraGenRecipeType.EXTRA_GEN_RECIPE_TYPES.register(modEventBus);
-//            ExtraGenRecipeSerializers.GEN_RECIPE_SERIALIZERS.register(modEventBus);
         }
     }
 

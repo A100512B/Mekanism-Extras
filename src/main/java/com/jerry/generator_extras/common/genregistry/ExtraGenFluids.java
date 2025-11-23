@@ -1,7 +1,7 @@
 package com.jerry.generator_extras.common.genregistry;
 
 import com.jerry.mekanism_extras.MekanismExtras;
-import com.jerry.mekanism_extras.common.registry.ExtraChemicalConstants;
+import com.jerry.mekanism_extras.common.registries.ExtraChemicalConstants;
 import mekanism.common.Mekanism;
 import mekanism.common.registration.impl.FluidDeferredRegister;
 import mekanism.common.registration.impl.FluidRegistryObject;

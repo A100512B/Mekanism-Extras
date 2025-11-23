@@ -1,6 +1,6 @@
 package com.jerry.mekanism_extras.client.jei;
 
-import com.jerry.mekanism_extras.common.registry.ExtraBlock;
+import com.jerry.mekanism_extras.common.registries.ExtraBlock;
 import com.jerry.mekanism_extras.common.tier.AdvancedFactoryTier;
 import com.jerry.mekanism_extras.common.util.ExtraEnumUtils;
 import mekanism.api.providers.IBlockProvider;

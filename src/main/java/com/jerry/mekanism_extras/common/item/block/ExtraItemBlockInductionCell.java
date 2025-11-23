@@ -1,7 +1,7 @@
 package com.jerry.mekanism_extras.common.item.block;
 
 import com.jerry.mekanism_extras.common.tier.ICTier;
-import com.jerry.mekanism_extras.common.tile.multiblock.ExtraTileEntityInductionCell;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.ExtraTileEntityInductionCell;
 import mekanism.api.text.EnumColor;
 import mekanism.common.MekanismLang;
 import mekanism.common.block.attribute.Attribute;

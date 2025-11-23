@@ -1,7 +1,7 @@
 package com.jerry.mekanism_extras.common.item;
 
 import com.jerry.mekanism_extras.common.content.network.transmitter.IExtraUpgradeableTransmitter;
-import com.jerry.mekanism_extras.common.registry.ExtraBlock;
+import com.jerry.mekanism_extras.common.registries.ExtraBlock;
 //import com.jerry.mekanism_extras.integration.Addons;
 //import fr.iglee42.evolvedmekanism.tiers.EMBaseTier;
 import mekanism.api.IAlloyInteraction;

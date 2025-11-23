@@ -2,7 +2,7 @@ package com.jerry.mekanism_extras.common.content.blocktype;
 
 import com.jerry.mekanism_extras.api.ExtraUpgrade;
 import com.jerry.mekanism_extras.common.block.attribute.ExtraAttributeUpgradeable;
-import com.jerry.mekanism_extras.common.registry.ExtraBlock;
+import com.jerry.mekanism_extras.common.registries.ExtraBlock;
 import com.jerry.mekanism_extras.common.tier.AdvancedFactoryTier;
 import mekanism.api.Upgrade;
 import mekanism.common.MekanismLang;

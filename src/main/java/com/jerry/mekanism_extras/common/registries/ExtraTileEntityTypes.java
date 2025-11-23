@@ -1,4 +1,4 @@
-package com.jerry.mekanism_extras.common.registry;
+package com.jerry.mekanism_extras.common.registries;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -11,6 +11,8 @@ import com.jerry.mekanism_extras.common.tile.ExtraTileEntityChemicalTank;
 import com.jerry.mekanism_extras.common.tile.ExtraTileEntityEnergyCube;
 import com.jerry.mekanism_extras.common.tile.ExtraTileEntityFluidTank;
 import com.jerry.mekanism_extras.common.tile.ExtraTileEntityRadioactiveWasteBarrel;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.TileEntityReinforcedInductionCasing;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.TileEntityReinforcedInductionPort;
 import com.jerry.mekanism_extras.common.tile.transmitter.ExtraTileEntityUniversalCable;
 import com.jerry.mekanism_extras.common.tile.transmitter.ExtraTileEntityLogisticalTransporter;
 import com.jerry.mekanism_extras.common.tile.transmitter.ExtraTileEntityLogisticalTransporterBase;
@@ -18,9 +20,8 @@ import com.jerry.mekanism_extras.common.tile.transmitter.ExtraTileEntityTransmit
 import com.jerry.mekanism_extras.common.tile.transmitter.ExtraTileEntityMechanicalPipe;
 import com.jerry.mekanism_extras.common.tile.transmitter.ExtraTileEntityThermodynamicConductor;
 import com.jerry.mekanism_extras.common.tile.transmitter.ExtraTileEntityPressurizedTube;
-import com.jerry.mekanism_extras.common.tile.multiblock.*;
-import com.jerry.mekanism_extras.common.tile.multiblock.ExtraTileEntityInductionCell;
-import com.jerry.mekanism_extras.common.tile.multiblock.ExtraTileEntityInductionProvider;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.ExtraTileEntityInductionCell;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.ExtraTileEntityInductionProvider;
 import com.jerry.mekanism_extras.common.util.ExtraEnumUtils;
 import mekanism.common.content.blocktype.FactoryType;
 import mekanism.common.registration.impl.BlockRegistryObject;

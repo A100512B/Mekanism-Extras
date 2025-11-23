@@ -1,6 +1,6 @@
 package com.jerry.mekanism_extras.mixin;
 
-import com.jerry.mekanism_extras.common.registry.ExtraItem;
+import com.jerry.mekanism_extras.common.registries.ExtraItem;
 import mekanism.api.Upgrade;
 import mekanism.common.util.UpgradeUtils;
 import net.minecraft.world.item.ItemStack;

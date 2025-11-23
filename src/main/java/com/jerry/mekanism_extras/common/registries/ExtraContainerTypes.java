@@ -1,4 +1,4 @@
-package com.jerry.mekanism_extras.common.registry;
+package com.jerry.mekanism_extras.common.registries;
 
 import com.jerry.mekanism_extras.MekanismExtras;
 import com.jerry.mekanism_extras.common.inventory.container.tile.AdvancedFactoryContainer;
@@ -7,7 +7,7 @@ import com.jerry.mekanism_extras.common.tile.machine.TileEntityAdvancedElectricP
 import com.jerry.mekanism_extras.common.tile.ExtraTileEntityChemicalTank;
 import com.jerry.mekanism_extras.common.tile.ExtraTileEntityEnergyCube;
 import com.jerry.mekanism_extras.common.tile.ExtraTileEntityFluidTank;
-import com.jerry.mekanism_extras.common.tile.multiblock.TileEntityReinforcedInductionCasing;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.TileEntityReinforcedInductionCasing;
 import mekanism.common.inventory.container.tile.EmptyTileContainer;
 import mekanism.common.inventory.container.tile.MekanismTileContainer;
 import mekanism.common.registration.impl.ContainerTypeDeferredRegister;

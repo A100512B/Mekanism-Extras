@@ -1,7 +1,7 @@
 package com.jerry.mekanism_extras.common.command;
 
 import com.jerry.generator_extras.common.genregistry.ExtraGenBlocks;
-import com.jerry.mekanism_extras.common.registry.ExtraBlock;
+import com.jerry.mekanism_extras.common.registries.ExtraBlock;
 import mekanism.common.command.builders.StructureBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;

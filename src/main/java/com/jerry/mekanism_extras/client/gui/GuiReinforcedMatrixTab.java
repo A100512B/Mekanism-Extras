@@ -1,7 +1,7 @@
 package com.jerry.mekanism_extras.client.gui;
 
 import com.jerry.mekanism_extras.common.network.to_server.ExtraPacketGuiButtonPress;
-import com.jerry.mekanism_extras.common.tile.multiblock.TileEntityReinforcedInductionCasing;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.TileEntityReinforcedInductionCasing;
 import mekanism.api.text.ILangEntry;
 import mekanism.client.SpecialColors;
 import mekanism.client.gui.IGuiWrapper;

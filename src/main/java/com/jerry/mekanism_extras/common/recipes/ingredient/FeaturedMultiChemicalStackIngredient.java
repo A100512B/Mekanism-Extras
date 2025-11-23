@@ -35,7 +35,7 @@ public abstract class FeaturedMultiChemicalStackIngredient<CHEMICAL extends Chem
     @Unmodifiable
     private final List<Feature<?>> features;
 
-    FeaturedMultiChemicalStackIngredient(INGREDIENT ingredient, Feature<?>... features) {
+    public FeaturedMultiChemicalStackIngredient(INGREDIENT ingredient, Feature<?>... features) {
         this.ingredient = ingredient;
         this.features = Arrays.stream(features).toList();
         this.featureMask = this.features.stream()
@@ -96,7 +96,7 @@ public abstract class FeaturedMultiChemicalStackIngredient<CHEMICAL extends Chem
     @Override
     public void write(FriendlyByteBuf buffer) {
         ingredient.write(buffer);
-        FeatureNetworkHandler.writeFeatures(buffer, features.toArray(Feature[]::new));
+        FeatureNetworkHandler.write(buffer, features.toArray(Feature[]::new));
     }
 
     @Override
@@ -136,7 +136,7 @@ public abstract class FeaturedMultiChemicalStackIngredient<CHEMICAL extends Chem
 
     public static class FeaturedMultiGasStackIngredient extends FeaturedMultiChemicalStackIngredient<Gas, GasStack, GasStackIngredient> {
 
-        FeaturedMultiGasStackIngredient(GasStackIngredient ingredient, Feature<?>... features) {
+        public FeaturedMultiGasStackIngredient(GasStackIngredient ingredient, Feature<?>... features) {
             super(ingredient, features);
         }
 
@@ -148,7 +148,7 @@ public abstract class FeaturedMultiChemicalStackIngredient<CHEMICAL extends Chem
 
     public static class FeaturedMultiInfusionStackIngredient extends FeaturedMultiChemicalStackIngredient<InfuseType, InfusionStack, InfusionStackIngredient> {
 
-        FeaturedMultiInfusionStackIngredient(InfusionStackIngredient ingredient, Feature<?>... features) {
+        public FeaturedMultiInfusionStackIngredient(InfusionStackIngredient ingredient, Feature<?>... features) {
             super(ingredient, features);
         }
 
@@ -160,7 +160,7 @@ public abstract class FeaturedMultiChemicalStackIngredient<CHEMICAL extends Chem
 
     public static class FeaturedMultiPigmentStackIngredient extends FeaturedMultiChemicalStackIngredient<Pigment, PigmentStack, PigmentStackIngredient> {
 
-        FeaturedMultiPigmentStackIngredient(PigmentStackIngredient ingredient, Feature<?>... features) {
+        public FeaturedMultiPigmentStackIngredient(PigmentStackIngredient ingredient, Feature<?>... features) {
             super(ingredient, features);
         }
 
@@ -172,7 +172,7 @@ public abstract class FeaturedMultiChemicalStackIngredient<CHEMICAL extends Chem
 
     public static class FeaturedMultiSlurryStackIngredient extends FeaturedMultiChemicalStackIngredient<Slurry, SlurryStack, SlurryStackIngredient> {
 
-        FeaturedMultiSlurryStackIngredient(SlurryStackIngredient ingredient, Feature<?>... features) {
+         public FeaturedMultiSlurryStackIngredient(SlurryStackIngredient ingredient, Feature<?>... features) {
             super(ingredient, features);
         }
 

@@ -2,9 +2,9 @@ package com.jerry.mekanism_extras.common.content.blocktype;
 
 import com.jerry.mekanism_extras.common.block.attribute.ExtraAttributeTier;
 import com.jerry.mekanism_extras.common.block.attribute.ExtraAttributeUpgradeable;
-import com.jerry.mekanism_extras.common.registry.ExtraBlock;
-import com.jerry.mekanism_extras.common.registry.ExtraBlockType;
-import com.jerry.mekanism_extras.common.registry.ExtraContainerTypes;
+import com.jerry.mekanism_extras.common.registries.ExtraBlock;
+import com.jerry.mekanism_extras.common.registries.ExtraBlockType;
+import com.jerry.mekanism_extras.common.registries.ExtraContainerTypes;
 import com.jerry.mekanism_extras.common.tier.AdvancedFactoryTier;
 import com.jerry.mekanism_extras.common.tile.factory.TileEntityExtraFactory;
 import com.jerry.mekanism_extras.common.util.ExtraEnumUtils;

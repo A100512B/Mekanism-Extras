@@ -1,4 +1,4 @@
-package com.jerry.mekanism_extras.common.registry;
+package com.jerry.mekanism_extras.common.registries;
 
 import mekanism.common.base.IChemicalConstant;
 

@@ -1,4 +1,4 @@
-package com.jerry.mekanism_extras.common.registry;
+package com.jerry.mekanism_extras.common.registries;
 
 import com.jerry.mekanism_extras.MekanismExtras;
 import mekanism.common.registration.impl.FluidDeferredRegister;

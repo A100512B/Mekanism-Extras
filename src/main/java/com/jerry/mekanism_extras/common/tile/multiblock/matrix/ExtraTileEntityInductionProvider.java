@@ -1,4 +1,4 @@
-package com.jerry.mekanism_extras.common.tile.multiblock;
+package com.jerry.mekanism_extras.common.tile.multiblock.matrix;
 
 import com.jerry.mekanism_extras.common.tier.IPTier;
 import mekanism.api.providers.IBlockProvider;

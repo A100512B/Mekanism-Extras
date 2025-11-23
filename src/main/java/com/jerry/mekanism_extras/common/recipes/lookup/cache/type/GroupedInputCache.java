@@ -63,12 +63,8 @@ public abstract class GroupedInputCache<KEY, INPUT, INGREDIENT extends FeaturedM
      *
      * @param recipe           Recipe of which the given ingredients are inputs.
      * @param inputIngredients Ingredient set to be mapped and cached.
-     * @return {@code true} if any ingredient of the set is complex and the
-     * {@link mekanism.common.recipe.lookup.cache.IInputRecipeCache} will need
-     * to do extra handling, or {@code false} if we were able to fully cache
-     * the ingredient's components.
      */
-    public boolean mapGroupedInputs(RECIPE recipe, Set<INGREDIENT> inputIngredients) {
+    public void mapGroupedInputs(RECIPE recipe, Set<INGREDIENT> inputIngredients) {
         // Cache single items
         inputIngredients.forEach(ingredient -> ingredient.getRepresentations()
                 .forEach(stack -> this.inputCache
@@ -82,8 +78,6 @@ public abstract class GroupedInputCache<KEY, INPUT, INGREDIENT extends FeaturedM
                 .map(HashSet::new)
                 .forEach(set -> this.preciseInputCache.
                         computeIfAbsent(createGroupedKey(set), k -> new HashSet<>()).add(recipe));
-
-        return !inputIngredients.stream().allMatch(FeaturedMultiIngredient::handleable);
     }
 
     /**
@@ -96,11 +90,12 @@ public abstract class GroupedInputCache<KEY, INPUT, INGREDIENT extends FeaturedM
     }
 
     /**
-     * Checks if this {@link IInputCache} knows about the single given input.
+     * Checks if this {@link IInputCache} knows about a recipe which contains
+     * the given single input.
      *
      * @param input Input to check.
-     * @return {@code true} if this cache does have the given input,
-     * {@code false} if there isn't.
+     * @return {@code true} if this cache knows a recipe that contains the
+     * given input, {@code false} otherwise.
      */
     @Override
     public boolean contains(INPUT input) {
@@ -108,41 +103,78 @@ public abstract class GroupedInputCache<KEY, INPUT, INGREDIENT extends FeaturedM
     }
 
     /**
-     * Checks if this {@link IInputCache} knows about the single given input.
-     * If so, check if any of the recipes match the given predicate.
-     * @param input Input to check.
+     * Checks if this {@link IInputCache} knows about a recipe which contains
+     * the given single input and match the given criteria.
+     *
+     * @param input         Input to check.
      * @param matchCriteria Predicate to further validate recipes with.
-     * @return {@code true} if this cache does have the given input with a
-     * recipe matching the predicate, {@code false} if there isn't.
+     * @return {@code true} if this cache knows a recipe that contains the
+     * given input and matches the given criteria, {@code false} otherwise.
      */
     @Override
     public boolean contains(INPUT input, Predicate<RECIPE> matchCriteria) {
-        Set<RECIPE> recipes = inputCache.get(input);
+        Set<RECIPE> recipes = inputCache.get(createSingleKey(input));
         return recipes != null && recipes.stream().anyMatch(matchCriteria);
     }
 
     /**
-     * Checks if this {@link GroupedInputCache} knows about all the given
-     * inputs.
+     * Checks if this {@link GroupedInputCache} knows about a recipe which
+     * contains all the given inputs (may have other inputs).
+     *
+     * @param input Inputs to check. An empty input set will always result
+     *              in a {@code true} return value.
+     * @return {@code true} if this cache knows a recipe that contains the
+     * given inputs (may have extra inputs), {@code false} otherwise.
+     */
+    public boolean containsForPartial(@NotNull Set<INPUT> input) {
+        Set<KEY> partialKey = createGroupedKey(input);
+        return preciseInputCache.entrySet().stream()
+                .anyMatch(entry -> entry.getKey().containsAll(partialKey));
+    }
+
+    /**
+     * Checks if this {@link GroupedInputCache} knows about a recipe which
+     * contains all the given inputs (may have other inputs) and matches
+     * the given criteria.
+     *
+     * @param input         Inputs to check. An empty input set will always
+     *                      result in a {@code true} return value.
+     * @param matchCriteria Predicate to further validate recipes with.
+     * @return {@code true} if this cache knows a recipe that contains the
+     * given inputs (may have extra inputs) and matches the given criteria,
+     * {@code false} otherwise.
+     */
+    public boolean containsForPartial(@NotNull Set<INPUT> input, Predicate<RECIPE> matchCriteria) {
+        Set<KEY> partialKey = createGroupedKey(input);
+        return preciseInputCache.entrySet().stream()
+                .filter(entry -> entry.getKey().containsAll(partialKey))
+                .map(Map.Entry::getValue)
+                .flatMap(Set::stream)
+                .anyMatch(matchCriteria);
+    }
+
+    /**
+     * Checks if this {@link GroupedInputCache} knows about a recipe which
+     * exactly contains all the given inputs.
      *
      * @param input Inputs to check.
-     * @return {@code true} if this cache does have all the given inputs,
-     * {@code false} if there aren't.
+     * @return {@code true} if at least a recipe exactly has all the given
+     * inputs, {@code false} otherwise.
      */
-    public boolean containsWhole(Set<INPUT> input) {
+    public boolean containsWhole(@NotNull Set<INPUT> input) {
         return preciseInputCache.containsKey(createGroupedKey(input));
     }
 
     /**
-     * Checks if this {@link GroupedInputCache} knows about all the given
-     * inputs. If so,
+     * Checks if this {@link GroupedInputCache} knows about a recipe which
+     * exactly contains all the given inputs and match the given criteria.
      *
-     * @param input Inputs to check.
+     * @param input         Inputs to check.
      * @param matchCriteria Predicate to further validate recipes with.
-     * @return {@code true} if this cache does have all the given inputs
-     * with a recipe matching the predicate, {@code false} if there aren't.
+     * @return {@code true} if at least a recipe exactly has all the given
+     * inputs and matches the given criteria, {@code false} otherwise.
      */
-    public boolean containsWhole(Set<INPUT> input, Predicate<RECIPE> matchCriteria) {
+    public boolean containsWhole(@NotNull Set<INPUT> input, Predicate<RECIPE> matchCriteria) {
         Set<RECIPE> recipes = preciseInputCache.get(input);
         return recipes != null && recipes.stream().anyMatch(matchCriteria);
     }
@@ -161,7 +193,8 @@ public abstract class GroupedInputCache<KEY, INPUT, INGREDIENT extends FeaturedM
      * @param inputs Inputs to convert into a key.
      * @return Key representing the given input group.
      */
-    protected @Unmodifiable Set<KEY> createGroupedKey(Set<INPUT> inputs) {
+    @Unmodifiable
+    protected Set<KEY> createGroupedKey(Set<INPUT> inputs) {
         return inputs.stream()
                 .map(this::createSingleKey)
                 .collect(Collectors.toSet());
@@ -198,6 +231,7 @@ public abstract class GroupedInputCache<KEY, INPUT, INGREDIENT extends FeaturedM
      * {@code null} if no recipe matches.
      * @apiNote We don't check the amount, only the type.
      */
+    @Nullable
     public RECIPE findFirstRecipe(Set<INPUT> allInputs, Predicate<RECIPE> matchCriteria) {
         Set<RECIPE> recipes = inputCache.get(createGroupedKey(allInputs));
         if (recipes == null) return null;
@@ -211,7 +245,33 @@ public abstract class GroupedInputCache<KEY, INPUT, INGREDIENT extends FeaturedM
      * Finds the first recipe that contains all the given inputs (may contain
      * other inputs) and matches the given criteria.
      *
-     * @param partialInputs Partial inputs to check.
+     * @param partialInputs Partial inputs to check. If this is empty, all
+     *                      recipes are going to be checked (as all recipes
+     *                      have an empty set as the subset of their
+     *                      ingredients).
+     * @return Recipe for the given input that matches the given criteria, or
+     * {@code null} if no recipe matches.
+     * @apiNote We don't check the amount, only the type.
+     */
+    @Nullable
+    public RECIPE findFirstRecipeForPartial(Set<INPUT> partialInputs) {
+        Set<KEY> partialKey = createGroupedKey(partialInputs);
+        return preciseInputCache.entrySet().stream()
+                .filter(entry -> entry.getKey().containsAll(partialKey))
+                .map(Map.Entry::getValue)
+                .flatMap(Set::stream)
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Finds the first recipe that contains all the given inputs (may contain
+     * other inputs) and matches the given criteria.
+     *
+     * @param partialInputs Partial inputs to check. If this is empty, all
+     *                      recipes are going to be checked (as all recipes
+     *                      have an empty set as the subset of their
+     *                      ingredients).
      * @param matchCriteria Predicate to further validate recipes with.
      * @return Recipe for the given input that matches the given criteria, or
      * {@code null} if no recipe matches.

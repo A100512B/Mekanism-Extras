@@ -1,4 +1,4 @@
-package com.jerry.mekanism_extras.common.tile.multiblock;
+package com.jerry.mekanism_extras.common.tile.multiblock.matrix;
 
 import mekanism.common.integration.computer.BaseComputerHelper;
 import mekanism.common.integration.computer.ComputerException;

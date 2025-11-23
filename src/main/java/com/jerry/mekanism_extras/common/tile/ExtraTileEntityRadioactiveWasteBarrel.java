@@ -2,7 +2,7 @@ package com.jerry.mekanism_extras.common.tile;
 
 import com.jerry.mekanism_extras.common.capabilities.chemical.ExtraStackedWasteBarrel;
 import com.jerry.mekanism_extras.common.config.LoadConfig;
-import com.jerry.mekanism_extras.common.registry.ExtraBlock;
+import com.jerry.mekanism_extras.common.registries.ExtraBlock;
 import mekanism.api.*;
 import mekanism.api.chemical.gas.Gas;
 import mekanism.api.chemical.gas.GasStack;

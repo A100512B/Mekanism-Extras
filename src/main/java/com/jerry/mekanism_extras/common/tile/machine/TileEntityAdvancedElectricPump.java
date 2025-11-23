@@ -2,8 +2,8 @@ package com.jerry.mekanism_extras.common.tile.machine;
 
 import com.jerry.mekanism_extras.api.ExtraUpgrade;
 import com.jerry.mekanism_extras.common.config.LoadConfig;
-import com.jerry.mekanism_extras.common.registry.ExtraBlock;
-import com.jerry.mekanism_extras.common.registry.ExtraFluids;
+import com.jerry.mekanism_extras.common.registries.ExtraBlock;
+import com.jerry.mekanism_extras.common.registries.ExtraFluids;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import mekanism.api.*;
 import mekanism.api.math.FloatingLong;

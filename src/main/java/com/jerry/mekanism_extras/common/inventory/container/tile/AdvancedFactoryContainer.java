@@ -1,6 +1,6 @@
 package com.jerry.mekanism_extras.common.inventory.container.tile;
 
-import com.jerry.mekanism_extras.common.registry.ExtraContainerTypes;
+import com.jerry.mekanism_extras.common.registries.ExtraContainerTypes;
 import com.jerry.mekanism_extras.common.tile.factory.TileEntityExtraFactory;
 import com.jerry.mekanism_extras.common.tile.factory.TileEntitySawingExtraFactory;
 import mekanism.common.inventory.container.tile.MekanismTileContainer;

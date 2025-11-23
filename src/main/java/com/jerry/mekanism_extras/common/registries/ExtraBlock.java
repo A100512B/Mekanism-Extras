@@ -1,4 +1,4 @@
-package com.jerry.mekanism_extras.common.registry;
+package com.jerry.mekanism_extras.common.registries;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -41,11 +41,12 @@ import com.jerry.mekanism_extras.common.item.block.ExtraItemBlockResource;
 import com.jerry.mekanism_extras.common.resource.ExtraBlockResourceInfo;
 import com.jerry.mekanism_extras.common.resource.ore.ExtraOreBlockType;
 import com.jerry.mekanism_extras.common.resource.ore.ExtraOreType;
-import com.jerry.mekanism_extras.common.tile.multiblock.*;
 import com.jerry.mekanism_extras.common.item.block.ExtraItemBlockInductionCell;
-import com.jerry.mekanism_extras.common.tile.multiblock.ExtraTileEntityInductionCell;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.ExtraTileEntityInductionCell;
 import com.jerry.mekanism_extras.common.item.block.ExtraItemBlockInductionProvider;
-import com.jerry.mekanism_extras.common.tile.multiblock.ExtraTileEntityInductionProvider;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.ExtraTileEntityInductionProvider;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.TileEntityReinforcedInductionCasing;
+import com.jerry.mekanism_extras.common.tile.multiblock.matrix.TileEntityReinforcedInductionPort;
 import com.jerry.mekanism_extras.common.util.ExtraEnumUtils;
 import fr.iglee42.evolvedmekanism.registries.EMFactoryType;
 import mekanism.api.tier.ITier;
@@ -287,7 +288,6 @@ public class ExtraBlock {
     }
 
     public static void register(IEventBus eventBus) {
-//        BLOCKS.register(eventBus);
         EXTRA_BLOCK.register(eventBus);
     }
 }
