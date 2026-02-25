@@ -80,6 +80,8 @@ public class ExtraItem {
 
     public static final ItemRegistryObject<Item> REFINED_NETHERITE_INGOT = EXTRA_ITEMS.registerUnburnable("ingot_refined_netherite");
 
+    public static final ItemRegistryObject<Item> CHEMICAL_REACTOR_BLADE = EXTRA_ITEMS.register("chemical_reactor_blade", ItemChemicalReactorBlade::new);
+
     private static ItemRegistryObject<ExtraItemQIODrive> registryQIODrive(ExtraQIODriverTier tier) {
         return EXTRA_ITEMS.register("qio_drive_" + tier.name().toLowerCase(Locale.ROOT), properties -> new ExtraItemQIODrive(tier, properties));
     }

@@ -83,6 +83,8 @@ repositories {
         url = "https://maven.blamejared.com/"
     }
 
+    maven { url = 'https://maven.minecraftforge.net' }
+
     maven {
         url "https://cursemaven.com"
     }
@@ -158,4 +160,11 @@ tasks.named('jar', Jar).configure {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }

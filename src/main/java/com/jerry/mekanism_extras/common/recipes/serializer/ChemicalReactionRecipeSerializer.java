@@ -8,13 +8,6 @@ import com.jerry.mekanism_extras.MekanismExtras;
 import com.jerry.mekanism_extras.api.ExtraJsonConstants;
 import com.jerry.mekanism_extras.common.content.reactor.ChemicalReactorMultiblockData;
 import com.jerry.mekanism_extras.common.recipes.ChemicalReactionRecipe;
-import com.jerry.mekanism_extras.common.recipes.ingredient.FeaturedMultiChemicalStackIngredient.FeaturedMultiGasStackIngredient;
-import com.jerry.mekanism_extras.common.recipes.ingredient.FeaturedMultiChemicalStackIngredient.FeaturedMultiInfusionStackIngredient;
-import com.jerry.mekanism_extras.common.recipes.ingredient.FeaturedMultiChemicalStackIngredient.FeaturedMultiPigmentStackIngredient;
-import com.jerry.mekanism_extras.common.recipes.ingredient.FeaturedMultiChemicalStackIngredient.FeaturedMultiSlurryStackIngredient;
-import com.jerry.mekanism_extras.common.recipes.ingredient.FeaturedMultiFluidStackIngredient;
-import com.jerry.mekanism_extras.common.recipes.ingredient.FeaturedMultiIngredient;
-import com.jerry.mekanism_extras.common.recipes.ingredient.FeaturedMultiItemStackIngredient;
 import mekanism.api.JsonConstants;
 import mekanism.api.SerializerHelper;
 import mekanism.api.chemical.gas.GasStack;
@@ -22,6 +15,12 @@ import mekanism.api.chemical.infuse.InfusionStack;
 import mekanism.api.chemical.pigment.PigmentStack;
 import mekanism.api.chemical.slurry.SlurryStack;
 import mekanism.api.math.FloatingLong;
+import mekanism.api.recipes.ingredients.ChemicalStackIngredient.GasStackIngredient;
+import mekanism.api.recipes.ingredients.ChemicalStackIngredient.InfusionStackIngredient;
+import mekanism.api.recipes.ingredients.ChemicalStackIngredient.PigmentStackIngredient;
+import mekanism.api.recipes.ingredients.ChemicalStackIngredient.SlurryStackIngredient;
+import mekanism.api.recipes.ingredients.FluidStackIngredient;
+import mekanism.api.recipes.ingredients.ItemStackIngredient;
 import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import mekanism.common.Mekanism;
 import net.minecraft.network.FriendlyByteBuf;
@@ -34,9 +33,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class ChemicalReactionRecipeSerializer implements RecipeSerializer<ChemicalReactionRecipe> {
 
@@ -46,105 +43,64 @@ public class ChemicalReactionRecipeSerializer implements RecipeSerializer<Chemic
         this.factory = factory;
     }
 
-    /**
-     * JSON format:
-     * <code>
-     * <pre>
-     * {
-     *   "itemInputs": [
-     *     {
-     *       "ingredients": someIngredients...,
-     *       "nonConsumable": true,
-     *       "someOtherFeatures": ...
-     *     },
-     *     {
-     *       someSimilarObjects...
-     *     }
-     *   ],
-     *   "otherSimilarInputs": ...,
-     *   "itemOutputs": [
-     *     someStackDefinitions...
-     *   ],
-     *   "otherSimilarOutputs": ...,
-     *   "conditionsRequired": [
-     *     "someConditions"
-     *   ]
-     * }
-     * </pre>
-     * </code>
-     */
     @Override
+    @NotNull
     public ChemicalReactionRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
-        // Holy shit!!!!! Why did Mekanism create four chemical types but not unify them into one in 1.20.1?
-        Set<FeaturedMultiItemStackIngredient> inputItems = new HashSet<>();
+        int circuitType = 0;
+        if (json.has(ExtraJsonConstants.CIRCUIT_TYPE))
+            circuitType = json.get(ExtraJsonConstants.CIRCUIT_TYPE).getAsInt();
+
+        List<ItemStackIngredient> inputItems = new ArrayList<>();
         if (GsonHelper.isArrayNode(json, ExtraJsonConstants.ITEM_INPUTS)) {
             JsonArray itemInputsArray = json.getAsJsonArray(ExtraJsonConstants.ITEM_INPUTS);
             itemInputsArray.forEach(e -> {
                 JsonObject obj = e.getAsJsonObject();
-                inputItems.add(new FeaturedMultiItemStackIngredient(
-                        IngredientCreatorAccess.item().deserialize(obj.get(ExtraJsonConstants.INGREDIENTS)),
-                        FeaturedMultiIngredient.FeatureJSONHandler.deserialize(obj).toArray(FeaturedMultiIngredient.Feature[]::new)
-                ));
+                inputItems.add(IngredientCreatorAccess.item().deserialize(obj.get(ExtraJsonConstants.INGREDIENTS)));
             });
         }
 
-        Set<FeaturedMultiFluidStackIngredient> inputFluids = new HashSet<>();
+        List<FluidStackIngredient> inputFluids = new ArrayList<>();
         if (GsonHelper.isArrayNode(json, ExtraJsonConstants.FLUID_INPUTS)) {
             JsonArray fluidInputsArray = json.getAsJsonArray(ExtraJsonConstants.FLUID_INPUTS);
             fluidInputsArray.forEach(e -> {
                 JsonObject obj = e.getAsJsonObject();
-                inputFluids.add(new FeaturedMultiFluidStackIngredient(
-                        IngredientCreatorAccess.fluid().deserialize(obj.get(ExtraJsonConstants.INGREDIENTS)),
-                        FeaturedMultiIngredient.FeatureJSONHandler.deserialize(obj).toArray(FeaturedMultiIngredient.Feature[]::new)
-                ));
+                inputFluids.add(IngredientCreatorAccess.fluid().deserialize(obj.get(ExtraJsonConstants.INGREDIENTS)));
             });
         }
 
-        Set<FeaturedMultiGasStackIngredient> inputGases = new HashSet<>();
+        List<GasStackIngredient> inputGases = new ArrayList<>();
         if (GsonHelper.isArrayNode(json, ExtraJsonConstants.GAS_INPUTS)) {
             JsonArray gasInputsArray = json.getAsJsonArray(ExtraJsonConstants.GAS_INPUTS);
             gasInputsArray.forEach(e -> {
                 JsonObject obj = e.getAsJsonObject();
-                inputGases.add(new FeaturedMultiGasStackIngredient(
-                        IngredientCreatorAccess.gas().deserialize(obj.get(ExtraJsonConstants.INGREDIENTS)),
-                        FeaturedMultiIngredient.FeatureJSONHandler.deserialize(obj).toArray(FeaturedMultiIngredient.Feature[]::new)
-                ));
+                inputGases.add(IngredientCreatorAccess.gas().deserialize(obj.get(ExtraJsonConstants.INGREDIENTS)));
             });
         }
 
-        Set<FeaturedMultiInfusionStackIngredient> inputInfusions = new HashSet<>();
+        List<InfusionStackIngredient> inputInfusions = new ArrayList<>();
         if (GsonHelper.isArrayNode(json, ExtraJsonConstants.INFUSION_INPUTS)) {
             JsonArray infusionInputsArray = json.getAsJsonArray(ExtraJsonConstants.INFUSION_INPUTS);
             infusionInputsArray.forEach(e -> {
                 JsonObject obj = e.getAsJsonObject();
-                inputInfusions.add(new FeaturedMultiInfusionStackIngredient(
-                        IngredientCreatorAccess.infusion().deserialize(obj.get(ExtraJsonConstants.INGREDIENTS)),
-                        FeaturedMultiIngredient.FeatureJSONHandler.deserialize(obj).toArray(FeaturedMultiIngredient.Feature[]::new)
-                ));
+                inputInfusions.add(IngredientCreatorAccess.infusion().deserialize(obj.get(ExtraJsonConstants.INGREDIENTS)));
             });
         }
 
-        Set<FeaturedMultiPigmentStackIngredient> inputPigments = new HashSet<>();
+        List<PigmentStackIngredient> inputPigments = new ArrayList<>();
         if (GsonHelper.isArrayNode(json, ExtraJsonConstants.PIGMENT_INPUTS)) {
             JsonArray pigmentInputsArray = json.getAsJsonArray(ExtraJsonConstants.PIGMENT_INPUTS);
             pigmentInputsArray.forEach(e -> {
                 JsonObject obj = e.getAsJsonObject();
-                inputPigments.add(new FeaturedMultiPigmentStackIngredient(
-                        IngredientCreatorAccess.pigment().deserialize(obj.get(ExtraJsonConstants.INGREDIENTS)),
-                        FeaturedMultiIngredient.FeatureJSONHandler.deserialize(obj).toArray(FeaturedMultiIngredient.Feature[]::new)
-                ));
+                inputPigments.add(IngredientCreatorAccess.pigment().deserialize(obj.get(ExtraJsonConstants.INGREDIENTS)));
             });
         }
 
-        Set<FeaturedMultiSlurryStackIngredient> inputSlurries = new HashSet<>();
+        List<SlurryStackIngredient> inputSlurries = new ArrayList<>();
         if (GsonHelper.isArrayNode(json, ExtraJsonConstants.SLURRY_INPUTS)) {
             JsonArray slurryInputsArray = json.getAsJsonArray(ExtraJsonConstants.SLURRY_INPUTS);
             slurryInputsArray.forEach(e -> {
                 JsonObject obj = e.getAsJsonObject();
-                inputSlurries.add(new FeaturedMultiSlurryStackIngredient(
-                        IngredientCreatorAccess.slurry().deserialize(obj.get(ExtraJsonConstants.INGREDIENTS)),
-                        FeaturedMultiIngredient.FeatureJSONHandler.deserialize(obj).toArray(FeaturedMultiIngredient.Feature[]::new)
-                ));
+                inputSlurries.add(IngredientCreatorAccess.slurry().deserialize(obj.get(ExtraJsonConstants.INGREDIENTS)));
             });
         }
 
@@ -232,48 +188,44 @@ public class ChemicalReactionRecipeSerializer implements RecipeSerializer<Chemic
 
         return factory.create(id, inputItems, inputFluids, inputGases, inputInfusions, inputPigments, inputSlurries,
                 outputItems, outputFluids, outputGases, outputInfusions, outputPigments, outputSlurries, ticks.getAsInt(),
-                energyRequired, conditions);
+                energyRequired, circuitType, conditions);
     }
 
     @Override
     @Nullable
     public ChemicalReactionRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf buffer) {
         try {
+            int circuitType = buffer.readInt();
+
             int inputItemsSize = buffer.readVarInt();
-            Set<FeaturedMultiItemStackIngredient> inputItems = new HashSet<>();
+            List<ItemStackIngredient> inputItems = new ArrayList<>();
             for (int i = 0; i < inputItemsSize; i++) {
-                inputItems.add(new FeaturedMultiItemStackIngredient(IngredientCreatorAccess.item().read(buffer),
-                        FeaturedMultiIngredient.FeatureNetworkHandler.read(buffer).toArray(FeaturedMultiIngredient.Feature[]::new)));
+                inputItems.add(IngredientCreatorAccess.item().read(buffer));
             }
             int inputFluidsSize = buffer.readVarInt();
-            Set<FeaturedMultiFluidStackIngredient> inputFluids = new HashSet<>();
+            List<FluidStackIngredient> inputFluids = new ArrayList<>();
             for (int i = 0; i < inputFluidsSize; i++) {
-                inputFluids.add(new FeaturedMultiFluidStackIngredient(IngredientCreatorAccess.fluid().read(buffer),
-                        FeaturedMultiIngredient.FeatureNetworkHandler.read(buffer).toArray(FeaturedMultiIngredient.Feature[]::new)));
+                inputFluids.add(IngredientCreatorAccess.fluid().read(buffer));
             }
             int inputGasesSize = buffer.readVarInt();
-            Set<FeaturedMultiGasStackIngredient> inputGases = new HashSet<>();
+            List<GasStackIngredient> inputGases = new ArrayList<>();
             for (int i = 0; i < inputGasesSize; i++) {
-                inputGases.add(new FeaturedMultiGasStackIngredient(IngredientCreatorAccess.gas().read(buffer),
-                        FeaturedMultiIngredient.FeatureNetworkHandler.read(buffer).toArray(FeaturedMultiIngredient.Feature[]::new)));
+                inputGases.add(IngredientCreatorAccess.gas().read(buffer));
             }
             int inputInfusionsSize = buffer.readVarInt();
-            Set<FeaturedMultiInfusionStackIngredient> inputInfusions = new HashSet<>();
+            List<InfusionStackIngredient> inputInfusions = new ArrayList<>();
             for (int i = 0; i < inputInfusionsSize; i++) {
-                inputInfusions.add(new FeaturedMultiInfusionStackIngredient(IngredientCreatorAccess.infusion().read(buffer),
-                        FeaturedMultiIngredient.FeatureNetworkHandler.read(buffer).toArray(FeaturedMultiIngredient.Feature[]::new)));
+                inputInfusions.add(IngredientCreatorAccess.infusion().read(buffer));
             }
             int inputPigmentsSize = buffer.readVarInt();
-            Set<FeaturedMultiPigmentStackIngredient> inputPigments = new HashSet<>();
+            List<PigmentStackIngredient> inputPigments = new ArrayList<>();
             for (int i = 0; i < inputPigmentsSize; i++) {
-                inputPigments.add(new FeaturedMultiPigmentStackIngredient(IngredientCreatorAccess.pigment().read(buffer),
-                        FeaturedMultiIngredient.FeatureNetworkHandler.read(buffer).toArray(FeaturedMultiIngredient.Feature[]::new)));
+                inputPigments.add(IngredientCreatorAccess.pigment().read(buffer));
             }
             int inputSlurriesSize = buffer.readVarInt();
-            Set<FeaturedMultiSlurryStackIngredient> inputSlurries = new HashSet<>();
+            List<SlurryStackIngredient> inputSlurries = new ArrayList<>();
             for (int i = 0; i < inputSlurriesSize; i++) {
-                inputSlurries.add(new FeaturedMultiSlurryStackIngredient(IngredientCreatorAccess.slurry().read(buffer),
-                        FeaturedMultiIngredient.FeatureNetworkHandler.read(buffer).toArray(FeaturedMultiIngredient.Feature[]::new)));
+                inputSlurries.add(IngredientCreatorAccess.slurry().read(buffer));
             }
             int outputItemsSize = buffer.readVarInt();
             Set<ItemStack> outputItems = new HashSet<>();
@@ -310,7 +262,7 @@ public class ChemicalReactionRecipeSerializer implements RecipeSerializer<Chemic
             EnumSet<ChemicalReactorMultiblockData.ReactionCondition> conditions = buffer.readEnumSet(ChemicalReactorMultiblockData.ReactionCondition.class);
             return factory.create(id, inputItems, inputFluids, inputGases, inputInfusions, inputPigments, inputSlurries,
                     outputItems, outputFluids, outputGases, outputInfusions, outputPigments, outputSlurries,
-                    duration, energyRequired, conditions);
+                    duration, energyRequired, circuitType, conditions);
         } catch (Exception e) {
             Mekanism.logger.error("Error reading chemical reaction recipe from packet.", e);
             throw e;
@@ -331,12 +283,12 @@ public class ChemicalReactionRecipeSerializer implements RecipeSerializer<Chemic
     public interface IFactory {
 
         ChemicalReactionRecipe create(ResourceLocation id,
-                                      Set<FeaturedMultiItemStackIngredient> inputItems,
-                                      Set<FeaturedMultiFluidStackIngredient> inputFluids,
-                                      Set<FeaturedMultiGasStackIngredient> inputGases,
-                                      Set<FeaturedMultiInfusionStackIngredient> inputInfusions,
-                                      Set<FeaturedMultiPigmentStackIngredient> inputPigments,
-                                      Set<FeaturedMultiSlurryStackIngredient> inputSlurries,
+                                      List<ItemStackIngredient> inputItems,
+                                      List<FluidStackIngredient> inputFluids,
+                                      List<GasStackIngredient> inputGases,
+                                      List<InfusionStackIngredient> inputInfusions,
+                                      List<PigmentStackIngredient> inputPigments,
+                                      List<SlurryStackIngredient> inputSlurries,
                                       Set<ItemStack> outputItems,
                                       Set<FluidStack> outputFluids,
                                       Set<GasStack> outputGases,
@@ -344,6 +296,7 @@ public class ChemicalReactionRecipeSerializer implements RecipeSerializer<Chemic
                                       Set<PigmentStack> outputPigments,
                                       Set<SlurryStack> outputSlurries,
                                       int duration, FloatingLong energyRequired,
+                                      int circuitType,
                                       EnumSet<ChemicalReactorMultiblockData.ReactionCondition> conditions);
     }
 }

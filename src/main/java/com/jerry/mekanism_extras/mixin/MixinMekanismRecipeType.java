@@ -1,6 +1,6 @@
 package com.jerry.mekanism_extras.mixin;
 
-import com.jerry.mekanism_extras.common.recipes.lookup.cache.ChemicalReactionInputRecipeCache;
+import com.jerry.mekanism_extras.common.recipes.lookup.cache.DummyInputRecipeCache;
 import com.jerry.mekanism_extras.common.registries.ExtraRecipeTypes;
 import mekanism.api.recipes.MekanismRecipe;
 import mekanism.common.recipe.MekanismRecipeType;
@@ -24,6 +24,6 @@ public class MixinMekanismRecipeType {
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void meke$registerExtraRecipeTypes(CallbackInfo ci) {
-        ExtraRecipeTypes.CHEMICAL_REACTION = register("chemical_reaction", ChemicalReactionInputRecipeCache::new);
+        ExtraRecipeTypes.CHEMICAL_REACTION = register("chemical_reaction", DummyInputRecipeCache::new);
     }
 }

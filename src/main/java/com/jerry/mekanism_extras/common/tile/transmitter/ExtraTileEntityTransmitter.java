@@ -54,7 +54,7 @@ public abstract class ExtraTileEntityTransmitter extends TileEntityTransmitter i
                 if (transmitter instanceof IExtraUpgradeableTransmitter<?> upgradeableTransmitter && upgradeableTransmitter.canUpgrade(tier)) {
                     ExtraTileEntityTransmitter transmitterTile = (ExtraTileEntityTransmitter)transmitter.getTransmitterTile();
                     BlockState state = transmitterTile.getBlockState();
-                    BlockState upgradeState = transmitterTile.upgradeResult(state, tier.getAdvanceTier());
+                    BlockState upgradeState = transmitterTile.upgradeResult(state, tier.getAdvancedTier());
                     if (state == upgradeState) {
                         //Skip if it would not actually upgrade anything
                         continue;

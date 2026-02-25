@@ -14,6 +14,9 @@ import com.jerry.generator_extras.common.content.naquadah.NaquadahReactorMultibl
 import com.jerry.generator_extras.common.content.naquadah.NaquadahReactorValidator;
 import com.jerry.mekanism_extras.common.content.matrix.ExtraMatrixMultiblockData;
 import com.jerry.mekanism_extras.common.content.matrix.ExtraMatrixValidator;
+import com.jerry.mekanism_extras.common.content.reactor.ChemicalReactorCache;
+import com.jerry.mekanism_extras.common.content.reactor.ChemicalReactorMultiblockData;
+import com.jerry.mekanism_extras.common.content.reactor.ChemicalReactorValidator;
 import com.jerry.mekanism_extras.common.registries.*;
 import com.jerry.mekanism_extras.common.integration.Addons;
 import com.mojang.logging.LogUtils;
@@ -47,6 +50,7 @@ import java.nio.file.Path;
 
 @Mod(MekanismExtras.MODID)
 public class MekanismExtras implements IModModule {
+
     public static final String MODID = "mekanism_extras";
     public static final String MOD_NAME = "MekanismExtras";
     public static final Logger LOGGER = LogUtils.getLogger();
@@ -58,6 +62,7 @@ public class MekanismExtras implements IModModule {
     public static final MultiblockManager<ExtraMatrixMultiblockData> extraMatrixManager = new MultiblockManager<>("extraInductionMatrix", MultiblockCache::new, ExtraMatrixValidator::new);
     public static final MultiblockManager<NaquadahReactorMultiblockData> naquadahReactorManager = new MultiblockManager<>("naquadahReactor", NaquadahReactorCache::new, NaquadahReactorValidator::new);
     public static final MultiblockManager<PlasmaEvaporationMultiblockData> plasmaEvaporationPlantManager = new MultiblockManager<>("plasmaEvaporationPlant", MultiblockCache::new, PlasmaEvaporationValidator::new);
+    public static final MultiblockManager<ChemicalReactorMultiblockData> chemicalReactorManager = new MultiblockManager<>("chemical_reactor", ChemicalReactorCache::new, ChemicalReactorValidator::new);
 
     public MekanismExtras(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
@@ -90,6 +95,7 @@ public class MekanismExtras implements IModModule {
         if (Addons.MEKANISMGENERATORS.isLoaded()) {
             BuildCommand.register("naquadah", ExtraGenLang.NAQUADAH_REACTOR, new ExtraBuilders.NaquadahReactorBuilder());
             BuildCommand.register("plasma", ExtraGenLang.PLASMA_EVAPORATION, new ExtraBuilders.PlasmaEvaporationPlantBuilder());
+            BuildCommand.register("reactor", ExtraLang.CHEMICAL_REACTOR, new ExtraBuilders.ChemicalReactorBuilder());
         }
         event.getDispatcher().register(CommandMek.register());
     }

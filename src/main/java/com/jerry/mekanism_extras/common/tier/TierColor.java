@@ -7,7 +7,7 @@ public class TierColor {
     private static final int[] infiniteColor = new int[]{1, 2, 3};
 
     public static float[] getColor(IAdvancedTier tier) {
-        return switch (tier.getAdvanceTier()) {
+        return switch (tier.getAdvancedTier()) {
             case ABSOLUTE -> new float[]{255/255.0F, 255/255.0F, 0/255.0F};
             case SUPREME -> new float[]{255/255.0F, 0/255.0F, 0/255.0F};
             case COSMIC -> new float[]{cosmicColor[0]/255.0F, cosmicColor[1]/255.0F, cosmicColor[2]/255.0F};

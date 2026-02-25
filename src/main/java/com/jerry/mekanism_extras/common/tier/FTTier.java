@@ -21,7 +21,7 @@ public enum FTTier implements IAdvancedTier {
         advancedTier = tier;
     }
     @Override
-    public AdvancedTier getAdvanceTier() {
+    public AdvancedTier getAdvancedTier() {
         return advancedTier;
     }
 

@@ -21,12 +21,14 @@ import com.jerry.mekanism_extras.common.tile.multiblock.matrix.ExtraTileEntityIn
 import com.jerry.mekanism_extras.common.tile.multiblock.matrix.ExtraTileEntityInductionProvider;
 import com.jerry.mekanism_extras.common.tile.multiblock.matrix.TileEntityReinforcedInductionCasing;
 import com.jerry.mekanism_extras.common.tile.multiblock.matrix.TileEntityReinforcedInductionPort;
+import com.jerry.mekanism_extras.common.tile.multiblock.reactor.*;
 import com.jerry.mekanism_extras.common.util.ExtraEnumUtils;
 import com.jerry.mekanism_extras.common.util.ExtraFloatingLong;
 import fr.iglee42.evolvedmekanism.registries.EMFactoryType;
 import mekanism.api.Upgrade;
 import mekanism.common.MekanismLang;
 import mekanism.common.block.attribute.*;
+import mekanism.common.block.attribute.Attributes.AttributeCustomResistance;
 import mekanism.common.config.MekanismConfig;
 import mekanism.common.content.blocktype.*;
 import mekanism.common.content.blocktype.BlockType.BlockTypeBuilder;
@@ -186,6 +188,57 @@ public class ExtraBlockType {
     public static final BlockType TUNGSTEN_CASING = BlockTypeBuilder
             .createBlock(ExtraLang.DESCRIPTION_TUNGSTEN_CASING)
             .build();
+    // Chemical Reactor Casing
+    public static final BlockTypeTile<TileEntityChemicalReactorCasing> CHEMICAL_REACTOR_CASING = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> ExtraTileEntityTypes.CHEMICAL_REACTOR_CASING, ExtraLang.DESCRIPTION_CHEMICAL_REACTOR_CASING)
+            .externalMultiblock()
+            .build();
+    // Chemical Reactor Controller
+    public static final BlockTypeTile<TileEntityChemicalReactorController> CHEMICAL_REACTOR_CONTROLLER = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> ExtraTileEntityTypes.CHEMICAL_REACTOR_CONTROLLER, ExtraLang.DESCRIPTION_CHEMICAL_REACTOR_CONTROLLER)
+//            .withGui(() -> ExtraContainerTypes.CHEMICAL_REACTOR)
+//            .withSound(ExtraSounds.CHEMICAL_REACTION)
+            .with(Attributes.INVENTORY, Attributes.ACTIVE, new AttributeStateFacing(), new AttributeCustomResistance(8))
+            .externalMultiblock()
+            .build();
+    // Chemical Reactor Rotor
+    public static final BlockTypeTile<TileEntityChemicalReactorRotor> CHEMICAL_REACTOR_ROTOR = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> ExtraTileEntityTypes.CHEMICAL_REACTOR_ROTOR, ExtraLang.DESCRIPTION_CHEMICAL_REACTOR_ROTOR)
+            .withCustomShape(mekanism.generators.common.content.blocktype.BlockShapes.TURBINE_ROTOR)
+            .internalMultiblock()
+            .build();
+    // Chemical Inert Glass
+    public static final BlockTypeTile<TileEntityChemicalInertGlass> CHEMICAL_INERT_GLASS = BlockTypeTile.BlockTileBuilder
+            .createBlock(() -> ExtraTileEntityTypes.CHEMICAL_INERT_GLASS, ExtraLang.DESCRIPTION_CHEMICAL_INERT_CLASS)
+            .with(AttributeMultiblock.STRUCTURAL, Attributes.AttributeMobSpawn.NEVER)
+            .build();
+    // Chemical Reactor Item IO Hatches
+    public static final BlockTypeTile<TileEntityChemicalReactorItemIOHatch> BASIC_CHEMICAL_REACTOR_ITEM_IO_HATCH = createItemIOHatch(BasicItemIOHatchTier.BASIC, () -> ExtraTileEntityTypes.BASIC_CHEMICAL_REACTOR_ITEM_IO_HATCH, () -> ExtraBlock.ADVANCED_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorItemIOHatch> ADVANCED_CHEMICAL_REACTOR_ITEM_IO_HATCH = createItemIOHatch(BasicItemIOHatchTier.ADVANCED, () -> ExtraTileEntityTypes.ADVANCED_CHEMICAL_REACTOR_ITEM_IO_HATCH, () -> ExtraBlock.ELITE_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorItemIOHatch> ELITE_CHEMICAL_REACTOR_ITEM_IO_HATCH = createItemIOHatch(BasicItemIOHatchTier.ELITE, () -> ExtraTileEntityTypes.ELITE_CHEMICAL_REACTOR_ITEM_IO_HATCH, () -> ExtraBlock.ULTIMATE_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorItemIOHatch> ULTIMATE_CHEMICAL_REACTOR_ITEM_IO_HATCH = createItemIOHatch(BasicItemIOHatchTier.ULTIMATE, () -> ExtraTileEntityTypes.ULTIMATE_CHEMICAL_REACTOR_ITEM_IO_HATCH, () -> ExtraBlock.ABSOLUTE_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorItemIOHatch> ABSOLUTE_CHEMICAL_REACTOR_ITEM_IO_HATCH = createItemIOHatch(AdvancedItemIOHatchTier.ABSOLUTE, () -> ExtraTileEntityTypes.ABSOLUTE_CHEMICAL_REACTOR_ITEM_IO_HATCH, () -> ExtraBlock.SUPREME_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorItemIOHatch> SUPREME_CHEMICAL_REACTOR_ITEM_IO_HATCH = createItemIOHatch(AdvancedItemIOHatchTier.SUPREME, () -> ExtraTileEntityTypes.SUPREME_CHEMICAL_REACTOR_ITEM_IO_HATCH, () -> ExtraBlock.COSMIC_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorItemIOHatch> COSMIC_CHEMICAL_REACTOR_ITEM_IO_HATCH = createItemIOHatch(AdvancedItemIOHatchTier.COSMIC, () -> ExtraTileEntityTypes.COSMIC_CHEMICAL_REACTOR_ITEM_IO_HATCH, () -> ExtraBlock.INFINITE_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorItemIOHatch> INFINITE_CHEMICAL_REACTOR_ITEM_IO_HATCH = createItemIOHatch(AdvancedItemIOHatchTier.INFINITE, () -> ExtraTileEntityTypes.INFINITE_CHEMICAL_REACTOR_ITEM_IO_HATCH, () -> null);
+    // Chemical Reactor Fluid IO Hatches
+    public static final BlockTypeTile<TileEntityChemicalReactorFluidIOHatch> BASIC_CHEMICAL_REACTOR_FLUID_IO_HATCH = createFluidIOHatch(BasicFluidIOHatchTier.BASIC, () -> ExtraTileEntityTypes.BASIC_CHEMICAL_REACTOR_FLUID_IO_HATCH, () -> ExtraBlock.ADVANCED_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorFluidIOHatch> ADVANCED_CHEMICAL_REACTOR_FLUID_IO_HATCH = createFluidIOHatch(BasicFluidIOHatchTier.ADVANCED, () -> ExtraTileEntityTypes.ADVANCED_CHEMICAL_REACTOR_FLUID_IO_HATCH, () -> ExtraBlock.ELITE_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorFluidIOHatch> ELITE_CHEMICAL_REACTOR_FLUID_IO_HATCH = createFluidIOHatch(BasicFluidIOHatchTier.ELITE, () -> ExtraTileEntityTypes.ELITE_CHEMICAL_REACTOR_FLUID_IO_HATCH, () -> ExtraBlock.ULTIMATE_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorFluidIOHatch> ULTIMATE_CHEMICAL_REACTOR_FLUID_IO_HATCH = createFluidIOHatch(BasicFluidIOHatchTier.ULTIMATE, () -> ExtraTileEntityTypes.ULTIMATE_CHEMICAL_REACTOR_FLUID_IO_HATCH, () -> ExtraBlock.ABSOLUTE_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorFluidIOHatch> ABSOLUTE_CHEMICAL_REACTOR_FLUID_IO_HATCH = createFluidIOHatch(AdvancedFluidIOHatchTier.ABSOLUTE, () -> ExtraTileEntityTypes.ABSOLUTE_CHEMICAL_REACTOR_FLUID_IO_HATCH, () -> ExtraBlock.SUPREME_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorFluidIOHatch> SUPREME_CHEMICAL_REACTOR_FLUID_IO_HATCH = createFluidIOHatch(AdvancedFluidIOHatchTier.SUPREME, () -> ExtraTileEntityTypes.SUPREME_CHEMICAL_REACTOR_FLUID_IO_HATCH, () -> ExtraBlock.COSMIC_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorFluidIOHatch> COSMIC_CHEMICAL_REACTOR_FLUID_IO_HATCH = createFluidIOHatch(AdvancedFluidIOHatchTier.COSMIC, () -> ExtraTileEntityTypes.COSMIC_CHEMICAL_REACTOR_FLUID_IO_HATCH, () -> ExtraBlock.INFINITE_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorFluidIOHatch> INFINITE_CHEMICAL_REACTOR_FLUID_IO_HATCH = createFluidIOHatch(AdvancedFluidIOHatchTier.INFINITE, () -> ExtraTileEntityTypes.INFINITE_CHEMICAL_REACTOR_FLUID_IO_HATCH, () -> null);
+    // Chemical Reactor Chemical IO Hatches
+    public static final BlockTypeTile<TileEntityChemicalReactorChemicalIOHatch> BASIC_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = createChemicalIOHatch(BasicChemicalIOHatchTier.BASIC, () -> ExtraTileEntityTypes.BASIC_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH, () -> ExtraBlock.ADVANCED_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorChemicalIOHatch> ADVANCED_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = createChemicalIOHatch(BasicChemicalIOHatchTier.ADVANCED, () -> ExtraTileEntityTypes.ADVANCED_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH, () -> ExtraBlock.ELITE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorChemicalIOHatch> ELITE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = createChemicalIOHatch(BasicChemicalIOHatchTier.ELITE, () -> ExtraTileEntityTypes.ELITE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH, () -> ExtraBlock.ULTIMATE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorChemicalIOHatch> ULTIMATE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = createChemicalIOHatch(BasicChemicalIOHatchTier.ULTIMATE, () -> ExtraTileEntityTypes.ULTIMATE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH, () -> ExtraBlock.ABSOLUTE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorChemicalIOHatch> ABSOLUTE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = createChemicalIOHatch(AdvancedChemicalIOHatchTier.ABSOLUTE, () -> ExtraTileEntityTypes.ABSOLUTE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH, () -> ExtraBlock.SUPREME_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorChemicalIOHatch> SUPREME_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = createChemicalIOHatch(AdvancedChemicalIOHatchTier.SUPREME, () -> ExtraTileEntityTypes.SUPREME_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH, () -> ExtraBlock.COSMIC_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorChemicalIOHatch> COSMIC_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = createChemicalIOHatch(AdvancedChemicalIOHatchTier.COSMIC, () -> ExtraTileEntityTypes.COSMIC_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH, () -> ExtraBlock.INFINITE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
+    public static final BlockTypeTile<TileEntityChemicalReactorChemicalIOHatch> INFINITE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = createChemicalIOHatch(AdvancedChemicalIOHatchTier.INFINITE, () -> ExtraTileEntityTypes.INFINITE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH, () -> null);
 
     static {
         for (AdvancedFactoryTier tier : ExtraEnumUtils.ADVANCED_FACTORY_TIERS) {
@@ -225,7 +278,7 @@ public class ExtraBlockType {
         return Machine.MachineBuilder.createMachine(tile, MekanismLang.DESCRIPTION_BIN)
                 .with(new ExtraAttributeTier<>(tier), new ExtraAttributeUpgradeable(upgradeBlock))
                 .without(AttributeParticleFX.class, Attributes.AttributeSecurity.class, AttributeUpgradeSupport.class, Attributes.AttributeRedstone.class)
-                .withComputerSupport(tier.getAdvanceTier().getLowerName() + "Bin")
+                .withComputerSupport(tier.getAdvancedTier().getLowerName() + "Bin")
                 .build();
     }
 
@@ -235,7 +288,7 @@ public class ExtraBlockType {
                 .withCustomShape(BlockShapes.FLUID_TANK)
                 .with(new ExtraAttributeTier<>(tier), new ExtraAttributeUpgradeable(upgradeBlock))
                 .without(AttributeParticleFX.class, AttributeStateFacing.class, Attributes.AttributeRedstone.class, AttributeUpgradeSupport.class)
-                .withComputerSupport(tier.getAdvanceTier().getLowerName() + "FluidTank")
+                .withComputerSupport(tier.getAdvancedTier().getLowerName() + "FluidTank")
                 .build();
     }
 
@@ -245,7 +298,7 @@ public class ExtraBlockType {
                 .withEnergyConfig(new ExtraFloatingLong(tier.getMaxEnergy()))
                 .with(new ExtraAttributeTier<>(tier), new ExtraAttributeUpgradeable(upgradeBlock))
                 .without(AttributeParticleFX.class, AttributeStateActive.class, AttributeUpgradeSupport.class)
-                .withComputerSupport(tier.getAdvanceTier().getLowerName() +  "EnergyCube")
+                .withComputerSupport(tier.getAdvancedTier().getLowerName() +  "EnergyCube")
                 .build();
     }
 
@@ -255,7 +308,61 @@ public class ExtraBlockType {
                 .withCustomShape(BlockShapes.CHEMICAL_TANK)
                 .with(new ExtraAttributeTier<>(tier), new ExtraAttributeUpgradeable(upgradeBlock))
                 .without(AttributeParticleFX.class, AttributeStateActive.class, AttributeUpgradeSupport.class)
-                .withComputerSupport(tier.getAdvanceTier().getLowerName() + "ChemicalTank")
+                .withComputerSupport(tier.getAdvancedTier().getLowerName() + "ChemicalTank")
+                .build();
+    }
+
+    private static BlockTypeTile<TileEntityChemicalReactorItemIOHatch> createItemIOHatch(BasicItemIOHatchTier tier, Supplier<TileEntityTypeRegistryObject<TileEntityChemicalReactorItemIOHatch>> tile, Supplier<BlockRegistryObject<?, ?>> upgradeBlock) {
+        return BlockTypeTile.BlockTileBuilder.createBlock(tile, ExtraLang.DESCRIPTION_CHEMICAL_REACTOR_ITEM_IO_HATCH)
+//                .withGui(() -> ExtraContainerTypes.ITEM_IO_HATCH)
+//                .withSound(ExtraSounds.CHEMICAL_REACTION)
+                .with(new AttributeTier<>(tier), new AttributeUpgradeable(upgradeBlock), Attributes.ACTIVE, Attributes.COMPARATOR, Attributes.INVENTORY)
+                .externalMultiblock()
+                .build();
+    }
+
+    private static BlockTypeTile<TileEntityChemicalReactorItemIOHatch> createItemIOHatch(AdvancedItemIOHatchTier tier, Supplier<TileEntityTypeRegistryObject<TileEntityChemicalReactorItemIOHatch>> tile, Supplier<BlockRegistryObject<?, ?>> upgradeBlock) {
+        return BlockTypeTile.BlockTileBuilder.createBlock(tile, ExtraLang.DESCRIPTION_CHEMICAL_REACTOR_ITEM_IO_HATCH)
+//                .withGui(() -> ExtraContainerTypes.ITEM_IO_HATCH)
+//                .withSound(ExtraSounds.CHEMICAL_REACTION)
+                .with(new ExtraAttributeTier<>(tier), new ExtraAttributeUpgradeable(upgradeBlock), Attributes.ACTIVE, Attributes.COMPARATOR, Attributes.INVENTORY)
+                .externalMultiblock()
+                .build();
+    }
+
+    private static BlockTypeTile<TileEntityChemicalReactorFluidIOHatch> createFluidIOHatch(BasicFluidIOHatchTier tier, Supplier<TileEntityTypeRegistryObject<TileEntityChemicalReactorFluidIOHatch>> tile, Supplier<BlockRegistryObject<?, ?>> upgradeBlock) {
+        return BlockTypeTile.BlockTileBuilder.createBlock(tile, ExtraLang.DESCRIPTION_CHEMICAL_REACTOR_FLUID_IO_HATCH)
+//                .withGui(() -> ExtraContainerTypes.FLUID_IO_HATCH)
+//                .withSound(ExtraSounds.CHEMICAL_REACTION)
+                .with(new AttributeTier<>(tier), new AttributeUpgradeable(upgradeBlock), Attributes.ACTIVE, Attributes.COMPARATOR, Attributes.INVENTORY)
+                .externalMultiblock()
+                .build();
+    }
+
+    private static BlockTypeTile<TileEntityChemicalReactorFluidIOHatch> createFluidIOHatch(AdvancedFluidIOHatchTier tier, Supplier<TileEntityTypeRegistryObject<TileEntityChemicalReactorFluidIOHatch>> tile, Supplier<BlockRegistryObject<?, ?>> upgradeBlock) {
+        return BlockTypeTile.BlockTileBuilder.createBlock(tile, ExtraLang.DESCRIPTION_CHEMICAL_REACTOR_FLUID_IO_HATCH)
+//                .withGui(() -> ExtraContainerTypes.FLUID_IO_HATCH)
+//                .withSound(ExtraSounds.CHEMICAL_REACTION)
+                .with(new ExtraAttributeTier<>(tier), new ExtraAttributeUpgradeable(upgradeBlock), Attributes.ACTIVE, Attributes.COMPARATOR, Attributes.INVENTORY)
+                .externalMultiblock()
+                .build();
+    }
+
+    private static BlockTypeTile<TileEntityChemicalReactorChemicalIOHatch> createChemicalIOHatch(BasicChemicalIOHatchTier tier, Supplier<TileEntityTypeRegistryObject<TileEntityChemicalReactorChemicalIOHatch>> tile, Supplier<BlockRegistryObject<?, ?>> upgradeBlock) {
+        return BlockTypeTile.BlockTileBuilder.createBlock(tile, ExtraLang.DESCRIPTION_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH)
+//                .withGui(() -> ExtraContainerTypes.CHEMICAL_IO_HATCH)
+//                .withSound(ExtraSounds.CHEMICAL_REACTION)
+                .with(new AttributeTier<>(tier), new AttributeUpgradeable(upgradeBlock), Attributes.ACTIVE, Attributes.COMPARATOR, Attributes.INVENTORY)
+                .externalMultiblock()
+                .build();
+    }
+
+    private static BlockTypeTile<TileEntityChemicalReactorChemicalIOHatch> createChemicalIOHatch(AdvancedChemicalIOHatchTier tier, Supplier<TileEntityTypeRegistryObject<TileEntityChemicalReactorChemicalIOHatch>> tile, Supplier<BlockRegistryObject<?, ?>> upgradeBlock) {
+        return BlockTypeTile.BlockTileBuilder.createBlock(tile, ExtraLang.DESCRIPTION_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH)
+//                .withGui(() -> ExtraContainerTypes.CHEMICAL_IO_HATCH)
+//                .withSound(ExtraSounds.CHEMICAL_REACTION)
+                .with(new ExtraAttributeTier<>(tier), new ExtraAttributeUpgradeable(upgradeBlock), Attributes.ACTIVE, Attributes.COMPARATOR, Attributes.INVENTORY)
+                .externalMultiblock()
                 .build();
     }
 }

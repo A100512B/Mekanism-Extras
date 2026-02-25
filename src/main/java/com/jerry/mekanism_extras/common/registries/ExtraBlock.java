@@ -47,10 +47,12 @@ import com.jerry.mekanism_extras.common.item.block.ExtraItemBlockInductionProvid
 import com.jerry.mekanism_extras.common.tile.multiblock.matrix.ExtraTileEntityInductionProvider;
 import com.jerry.mekanism_extras.common.tile.multiblock.matrix.TileEntityReinforcedInductionCasing;
 import com.jerry.mekanism_extras.common.tile.multiblock.matrix.TileEntityReinforcedInductionPort;
+import com.jerry.mekanism_extras.common.tile.multiblock.reactor.*;
 import com.jerry.mekanism_extras.common.util.ExtraEnumUtils;
 import fr.iglee42.evolvedmekanism.registries.EMFactoryType;
 import mekanism.api.tier.ITier;
 import mekanism.common.block.attribute.AttributeTier;
+import mekanism.common.block.basic.BlockStructuralGlass;
 import mekanism.common.block.interfaces.IHasDescription;
 import mekanism.common.block.prefab.BlockBase;
 import mekanism.common.block.prefab.BlockBasicMultiblock;
@@ -92,7 +94,7 @@ public class ExtraBlock {
 
     private static <BLOCK extends Block, ITEM extends BlockItem> BlockRegistryObject<BLOCK, ITEM> registerTieredBlock_1(BlockType type, String registerName, Function<MapColor, ? extends BLOCK> blockSupplier, Function<BLOCK, ITEM> itemCreator) {
         IAdvancedTier tier = Objects.requireNonNull(type.get(ExtraAttributeTier.class)).tier();
-        return EXTRA_BLOCK.register(registerName, () -> blockSupplier.apply(tier.getAdvanceTier().getMapColor()), itemCreator);
+        return EXTRA_BLOCK.register(registerName, () -> blockSupplier.apply(tier.getAdvancedTier().getMapColor()), itemCreator);
     }
 
 //    public static final BlockRegistryObject<Block, BlockItem> NAQUADAH_ORE = EXTRA_BLOCK.register("naquadah_ore",
@@ -187,6 +189,38 @@ public class ExtraBlock {
     public static final BlockRegistryObject<BlockTile.BlockTileModel<ExtraTileEntityChemicalTank, Machine<ExtraTileEntityChemicalTank>>, ExtraItemBlockChemicalTank> SUPREME_CHEMICAL_TANK = registerChemicalTank("supreme", ExtraBlockType.SUPREME_CHEMICAL_TANK);
     public static final BlockRegistryObject<BlockTile.BlockTileModel<ExtraTileEntityChemicalTank, Machine<ExtraTileEntityChemicalTank>>, ExtraItemBlockChemicalTank> COSMIC_CHEMICAL_TANK = registerChemicalTank("cosmic", ExtraBlockType.COSMIC_CHEMICAL_TANK);
     public static final BlockRegistryObject<BlockTile.BlockTileModel<ExtraTileEntityChemicalTank, Machine<ExtraTileEntityChemicalTank>>, ExtraItemBlockChemicalTank> INFINITE_CHEMICAL_TANK = registerChemicalTank("infinite", ExtraBlockType.INFINITE_CHEMICAL_TANK);
+    // Chemical Reactor
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorCasing>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorCasing>>> CHEMICAL_REACTOR_CASING = registerTooltipBlock("chemical_reactor_casing", () -> new BlockBasicMultiblock<>(ExtraBlockType.CHEMICAL_REACTOR_CASING, properties -> properties.mapColor(MapColor.COLOR_BLACK)));
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorController>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorController>>> CHEMICAL_REACTOR_CONTROLLER = registerTooltipBlock("chemical_reactor_controller", () -> new BlockBasicMultiblock<>(ExtraBlockType.CHEMICAL_REACTOR_CONTROLLER, properties -> properties.mapColor(MapColor.COLOR_BLACK)));
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorRotor>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorRotor>>> CHEMICAL_REACTOR_ROTOR = registerTooltipBlock("chemical_reactor_rotor", () -> new BlockBasicMultiblock<>(ExtraBlockType.CHEMICAL_REACTOR_ROTOR, properties -> properties.mapColor(MapColor.COLOR_BLACK)));
+    public static final BlockRegistryObject<BlockStructuralGlass<TileEntityChemicalInertGlass>, ItemBlockTooltip<BlockStructuralGlass<TileEntityChemicalInertGlass>>> CHEMICAL_INERT_GLASS = registerTooltipBlock("chemical_inert_glass", () -> new BlockStructuralGlass<>(ExtraBlockType.CHEMICAL_INERT_GLASS));
+
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>>> BASIC_CHEMICAL_REACTOR_ITEM_IO_HATCH = registerItemIOHatch("basic", ExtraBlockType.BASIC_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>>> ADVANCED_CHEMICAL_REACTOR_ITEM_IO_HATCH = registerItemIOHatch("advanced", ExtraBlockType.ADVANCED_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>>> ELITE_CHEMICAL_REACTOR_ITEM_IO_HATCH = registerItemIOHatch("elite", ExtraBlockType.ELITE_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>>> ULTIMATE_CHEMICAL_REACTOR_ITEM_IO_HATCH = registerItemIOHatch("ultimate", ExtraBlockType.ULTIMATE_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>>> ABSOLUTE_CHEMICAL_REACTOR_ITEM_IO_HATCH = registerItemIOHatch("absolute", ExtraBlockType.ABSOLUTE_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>>> SUPREME_CHEMICAL_REACTOR_ITEM_IO_HATCH = registerItemIOHatch("supreme", ExtraBlockType.SUPREME_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>>> COSMIC_CHEMICAL_REACTOR_ITEM_IO_HATCH = registerItemIOHatch("cosmic", ExtraBlockType.COSMIC_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>>> INFINITE_CHEMICAL_REACTOR_ITEM_IO_HATCH = registerItemIOHatch("infinite", ExtraBlockType.INFINITE_CHEMICAL_REACTOR_ITEM_IO_HATCH);
+
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>>> BASIC_CHEMICAL_REACTOR_FLUID_IO_HATCH = registerFluidIOHatch("basic", ExtraBlockType.BASIC_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>>> ADVANCED_CHEMICAL_REACTOR_FLUID_IO_HATCH = registerFluidIOHatch("advanced", ExtraBlockType.ADVANCED_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>>> ELITE_CHEMICAL_REACTOR_FLUID_IO_HATCH = registerFluidIOHatch("elite", ExtraBlockType.ELITE_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>>> ULTIMATE_CHEMICAL_REACTOR_FLUID_IO_HATCH = registerFluidIOHatch("ultimate", ExtraBlockType.ULTIMATE_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>>> ABSOLUTE_CHEMICAL_REACTOR_FLUID_IO_HATCH = registerFluidIOHatch("absolute", ExtraBlockType.ABSOLUTE_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>>> SUPREME_CHEMICAL_REACTOR_FLUID_IO_HATCH = registerFluidIOHatch("supreme", ExtraBlockType.SUPREME_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>>> COSMIC_CHEMICAL_REACTOR_FLUID_IO_HATCH = registerFluidIOHatch("cosmic", ExtraBlockType.COSMIC_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>>> INFINITE_CHEMICAL_REACTOR_FLUID_IO_HATCH = registerFluidIOHatch("infinite", ExtraBlockType.INFINITE_CHEMICAL_REACTOR_FLUID_IO_HATCH);
+
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>>> BASIC_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = registerChemicalIOHatch("basic", ExtraBlockType.BASIC_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>>> ADVANCED_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = registerChemicalIOHatch("advanced", ExtraBlockType.ADVANCED_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>>> ELITE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = registerChemicalIOHatch("elite", ExtraBlockType.ELITE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>>> ULTIMATE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = registerChemicalIOHatch("ultimate", ExtraBlockType.ULTIMATE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>>> ABSOLUTE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = registerChemicalIOHatch("absolute", ExtraBlockType.ABSOLUTE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>>> SUPREME_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = registerChemicalIOHatch("supreme", ExtraBlockType.SUPREME_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>>> COSMIC_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = registerChemicalIOHatch("cosmic", ExtraBlockType.COSMIC_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
+    public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>>> INFINITE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH = registerChemicalIOHatch("infinite", ExtraBlockType.INFINITE_CHEMICAL_REACTOR_CHEMICAL_IO_HATCH);
     // Others
     public static final BlockRegistryObject<ExtraBlockRadioactiveWasteBarrel, ExtraItemBlockRadioactiveWasteBarrel> EXPAND_RADIOACTIVE_WASTE_BARREL = EXTRA_BLOCK.registerDefaultProperties("expand_radioactive_waste_barrel", ExtraBlockRadioactiveWasteBarrel::new, ExtraItemBlockRadioactiveWasteBarrel::new);
     public static final BlockRegistryObject<BlockTile.BlockTileModel<TileEntityAdvancedElectricPump, Machine<TileEntityAdvancedElectricPump>>, ItemBlockMachine> ADVANCED_ELECTRIC_PUMP = EXTRA_BLOCK.register("advance_electric_pump", () -> new BlockTile.BlockTileModel<>(ExtraBlockType.ADVANCED_ELECTRIC_PUMP, properties -> properties.mapColor(BlockResourceInfo.STEEL.getMapColor())), ItemBlockMachine::new);
@@ -251,6 +285,18 @@ public class ExtraBlock {
         return registerTieredBlock_1(type, tileName + "_chemical_tank", color -> new BlockTile.BlockTileModel<>(type, properties -> properties.mapColor(color)), ExtraItemBlockChemicalTank::new);
     }
 
+    private static BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorItemIOHatch>>> registerItemIOHatch(String tileName, BlockTypeTile<TileEntityChemicalReactorItemIOHatch> blockType) {
+        return registerTooltipBlock(tileName + "_chemical_reactor_item_io_hatch", () -> new BlockBasicMultiblock<>(blockType, properties -> properties.mapColor(MapColor.TERRACOTTA_BLACK)));
+    }
+
+    private static BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorFluidIOHatch>>> registerFluidIOHatch(String tileName, BlockTypeTile<TileEntityChemicalReactorFluidIOHatch> blockType) {
+        return registerTooltipBlock(tileName + "_chemical_reactor_fluid_io_hatch", () -> new BlockBasicMultiblock<>(blockType, properties -> properties.mapColor(MapColor.TERRACOTTA_BLACK)));
+    }
+
+    private static BlockRegistryObject<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityChemicalReactorChemicalIOHatch>>> registerChemicalIOHatch(String tileName, BlockTypeTile<TileEntityChemicalReactorChemicalIOHatch> blockType) {
+        return registerTooltipBlock(tileName + "_chemical_reactor_chemical_io_hatch", () -> new BlockBasicMultiblock<>(blockType, properties -> properties.mapColor(MapColor.TERRACOTTA_BLACK)));
+    }
+
     private static <BLOCK extends Block & IHasDescription> BlockRegistryObject<BLOCK, ItemBlockTooltip<BLOCK>> registerBlock(String name, Supplier<? extends BLOCK> blockSupplier) {
         return EXTRA_BLOCK.registerDefaultProperties(name, blockSupplier, ItemBlockTooltip::new);
     }
@@ -267,7 +313,7 @@ public class ExtraBlock {
 
     private static <BLOCK extends Block, ITEM extends BlockItem> BlockRegistryObject<BLOCK, ITEM> registerTieredBlock(IAdvancedTier tier, String suffix,
                                                                                                                       Supplier<? extends BLOCK> blockSupplier, Function<BLOCK, ITEM> itemCreator) {
-        return EXTRA_BLOCK.register(tier.getAdvanceTier().getLowerName() + suffix, blockSupplier, itemCreator);
+        return EXTRA_BLOCK.register(tier.getAdvancedTier().getLowerName() + suffix, blockSupplier, itemCreator);
     }
 
     /**
@@ -285,6 +331,10 @@ public class ExtraBlock {
     @SuppressWarnings("unchecked")
     public static BlockRegistryObject<BlockAdvancedFactoryMachine.BlockAdvancedFactory<?>, ItemBlockAdvancedFactory>[] getAdvancedFactoryBlocks() {
         return FACTORIES.values().toArray(new BlockRegistryObject[0]);
+    }
+
+    private static <BLOCK extends Block & IHasDescription> BlockRegistryObject<BLOCK, ItemBlockTooltip<BLOCK>> registerTooltipBlock(String name, Supplier<BLOCK> blockCreator) {
+        return EXTRA_BLOCK.registerDefaultProperties(name, blockCreator, ItemBlockTooltip::new);
     }
 
     public static void register(IEventBus eventBus) {

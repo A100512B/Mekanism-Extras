@@ -91,7 +91,7 @@ public class AdvancedFactory<TILE extends TileEntityExtraFactory<?>> extends Adv
         );
         //Note, we can't just return the builder here as then it gets all confused about object types, so we just
         // assign the value here, and then return the builder itself as it is the same object
-        builder.withComputerSupport(tier.getAdvanceTier().getLowerName() + type.getRegistryNameComponentCapitalized() + "Factory");
+        builder.withComputerSupport(tier.getAdvancedTier().getLowerName() + type.getRegistryNameComponentCapitalized() + "Factory");
         return builder;
     }
 }

@@ -20,7 +20,7 @@ public enum BTier implements IAdvancedTier {
     }
 
     @Override
-    public AdvancedTier getAdvanceTier() {
+    public AdvancedTier getAdvancedTier() {
         return advancedTier;
     }
 

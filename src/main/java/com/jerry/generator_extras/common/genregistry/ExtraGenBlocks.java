@@ -43,9 +43,11 @@ public class ExtraGenBlocks {
     private static <BLOCK extends Block & IHasDescription> BlockRegistryObject<BLOCK, ItemBlockTooltip<BLOCK>> registerBlock(String name, Supplier<? extends BLOCK> blockSupplier) {
         return EXTRA_GEN_BLOCK.registerDefaultProperties(name, blockSupplier, ItemBlockTooltip::new);
     }
+
     private static <BLOCK extends Block & IHasDescription> BlockRegistryObject<BLOCK, ItemBlockTooltip<BLOCK>> registerTooltipBlock(String name, Supplier<BLOCK> blockCreator) {
         return EXTRA_GEN_BLOCK.registerDefaultProperties(name, blockCreator, ItemBlockTooltip::new);
     }
+
     public static void register(IEventBus eventBus) {
         EXTRA_GEN_BLOCK.register(eventBus);
     }

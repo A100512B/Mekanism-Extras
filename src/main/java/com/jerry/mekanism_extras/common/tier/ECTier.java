@@ -32,7 +32,7 @@ public enum ECTier implements IAdvancedTier, StringRepresentable {
     }
 
     @Override
-    public AdvancedTier getAdvanceTier() {
+    public AdvancedTier getAdvancedTier() {
         return advancedTier;
     }
 

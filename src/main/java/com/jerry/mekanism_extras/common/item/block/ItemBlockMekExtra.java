@@ -55,7 +55,7 @@ public class ItemBlockMekExtra <BLOCK extends Block> extends BlockItem {
 
     public TextColor getTextColor(ItemStack stack) {
         IAdvancedTier tier = getAdvanceTier();
-        return tier == null ? null : tier.getAdvanceTier().getColor();
+        return tier == null ? null : tier.getAdvancedTier().getColor();
     }
 
     @NotNull

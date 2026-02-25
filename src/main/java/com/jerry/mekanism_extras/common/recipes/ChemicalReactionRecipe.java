@@ -1,22 +1,21 @@
 package com.jerry.mekanism_extras.common.recipes;
 
 import com.jerry.mekanism_extras.common.content.reactor.ChemicalReactorMultiblockData.ReactionCondition;
-import com.jerry.mekanism_extras.common.recipes.ingredient.FeaturedMultiChemicalStackIngredient.FeaturedMultiGasStackIngredient;
-import com.jerry.mekanism_extras.common.recipes.ingredient.FeaturedMultiChemicalStackIngredient.FeaturedMultiInfusionStackIngredient;
-import com.jerry.mekanism_extras.common.recipes.ingredient.FeaturedMultiChemicalStackIngredient.FeaturedMultiPigmentStackIngredient;
-import com.jerry.mekanism_extras.common.recipes.ingredient.FeaturedMultiChemicalStackIngredient.FeaturedMultiSlurryStackIngredient;
-import com.jerry.mekanism_extras.common.recipes.ingredient.FeaturedMultiFluidStackIngredient;
-import com.jerry.mekanism_extras.common.recipes.ingredient.FeaturedMultiItemStackIngredient;
 import com.jerry.mekanism_extras.common.registries.ExtraRecipeSerializers;
 import com.jerry.mekanism_extras.common.registries.ExtraRecipeTypes;
-import com.jerry.mekanism_extras.common.util.Predicate6;
 import mekanism.api.chemical.gas.GasStack;
 import mekanism.api.chemical.infuse.InfusionStack;
 import mekanism.api.chemical.pigment.PigmentStack;
 import mekanism.api.chemical.slurry.SlurryStack;
 import mekanism.api.math.FloatingLong;
 import mekanism.api.recipes.MekanismRecipe;
+import mekanism.api.recipes.ingredients.ChemicalStackIngredient.GasStackIngredient;
+import mekanism.api.recipes.ingredients.ChemicalStackIngredient.InfusionStackIngredient;
+import mekanism.api.recipes.ingredients.ChemicalStackIngredient.PigmentStackIngredient;
+import mekanism.api.recipes.ingredients.ChemicalStackIngredient.SlurryStackIngredient;
+import mekanism.api.recipes.ingredients.FluidStackIngredient;
 import mekanism.api.recipes.ingredients.InputIngredient;
+import mekanism.api.recipes.ingredients.ItemStackIngredient;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -25,21 +24,20 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ChemicalReactionRecipe
-        extends MekanismRecipe
-        implements Predicate6<Set<@NotNull ItemStack>, Set<@NotNull FluidStack>, Set<@NotNull GasStack>, Set<@NotNull InfusionStack>, Set<@NotNull PigmentStack>, Set<@NotNull SlurryStack>> {
+        extends MekanismRecipe {
 
-    private final Set<FeaturedMultiItemStackIngredient> inputItems;
-    private final Set<FeaturedMultiFluidStackIngredient> inputFluids;
-    private final Set<FeaturedMultiGasStackIngredient> inputGases;
-    private final Set<FeaturedMultiInfusionStackIngredient> inputInfusions;
-    private final Set<FeaturedMultiPigmentStackIngredient> inputPigments;
-    private final Set<FeaturedMultiSlurryStackIngredient> inputSlurries;
+    private final List<ItemStackIngredient> inputItems;
+    private final List<FluidStackIngredient> inputFluids;
+    private final List<GasStackIngredient> inputGases;
+    private final List<InfusionStackIngredient> inputInfusions;
+    private final List<PigmentStackIngredient> inputPigments;
+    private final List<SlurryStackIngredient> inputSlurries;
 
     private final Set<ItemStack> outputItems;
     private final Set<FluidStack> outputFluids;
@@ -50,30 +48,30 @@ public class ChemicalReactionRecipe
 
     private final int duration;
     private final FloatingLong energyRequired;
+    private final int circuitType;
     private final EnumSet<ReactionCondition> conditions;
 
     public ChemicalReactionRecipe(ResourceLocation id,
-                                   Set<FeaturedMultiItemStackIngredient> inputItems,
-                                   Set<FeaturedMultiFluidStackIngredient> inputFluids,
-                                   Set<FeaturedMultiGasStackIngredient> inputGases,
-                                   Set<FeaturedMultiInfusionStackIngredient> inputInfusions,
-                                   Set<FeaturedMultiPigmentStackIngredient> inputPigments,
-                                   Set<FeaturedMultiSlurryStackIngredient> inputSlurries,
-                                   Set<ItemStack> outputItems,
-                                   Set<FluidStack> outputFluids,
-                                   Set<GasStack> outputGases,
-                                   Set<InfusionStack> outputInfusions,
-                                   Set<PigmentStack> outputPigments,
-                                   Set<SlurryStack> outputSlurries,
-                                   int duration, FloatingLong energyRequired,
-                                   EnumSet<ReactionCondition> conditions) {
+                                  List<ItemStackIngredient> inputItems,
+                                  List<FluidStackIngredient> inputFluids,
+                                  List<GasStackIngredient> inputGases,
+                                  List<InfusionStackIngredient> inputInfusions,
+                                  List<PigmentStackIngredient> inputPigments,
+                                  List<SlurryStackIngredient> inputSlurries,
+                                  Set<ItemStack> outputItems,
+                                  Set<FluidStack> outputFluids,
+                                  Set<GasStack> outputGases,
+                                  Set<InfusionStack> outputInfusions,
+                                  Set<PigmentStack> outputPigments,
+                                  Set<SlurryStack> outputSlurries,
+                                  int duration, FloatingLong energyRequired,
+                                  int circuitType,
+                                  EnumSet<ReactionCondition> conditions) {
         super(id);
-        if (duration <= 0) {
-            throw new IllegalArgumentException("Duration must be positive.");
-        }
+        if (duration <= 0) throw new IllegalArgumentException("Duration must be positive.");
 
         // We don't check if any of the inputs or outputs is null as that
-        // would be troublesome
+        // would be troublesome and laggy
         this.inputItems = inputItems;
         this.inputFluids = inputFluids;
         this.inputGases = inputGases;
@@ -90,30 +88,32 @@ public class ChemicalReactionRecipe
         this.outputSlurries = outputSlurries.stream().map(SlurryStack::copy).collect(Collectors.toSet());
         this.duration = duration;
         this.energyRequired = Objects.requireNonNull(energyRequired, "Required energy cannot be null.").copyAsConst();
+        if (conditions.size() > 2) throw new IllegalArgumentException("Required conditions must not be more than two.");
+        this.circuitType = circuitType;
         this.conditions = conditions;
     }
 
-    public Set<FeaturedMultiItemStackIngredient> getInputItems() {
+    public List<ItemStackIngredient> getInputItems() {
         return inputItems;
     }
 
-    public Set<FeaturedMultiFluidStackIngredient> getInputFluids() {
+    public List<FluidStackIngredient> getInputFluids() {
         return inputFluids;
     }
 
-    public Set<FeaturedMultiGasStackIngredient> getInputGases() {
+    public List<GasStackIngredient> getInputGases() {
         return inputGases;
     }
 
-    public Set<FeaturedMultiInfusionStackIngredient> getInputInfusions() {
+    public List<InfusionStackIngredient> getInputInfusions() {
         return inputInfusions;
     }
 
-    public Set<FeaturedMultiPigmentStackIngredient> getInputPigments() {
+    public List<PigmentStackIngredient> getInputPigments() {
         return inputPigments;
     }
 
-    public Set<FeaturedMultiSlurryStackIngredient> getInputSlurries() {
+    public List<SlurryStackIngredient> getInputSlurries() {
         return inputSlurries;
     }
 
@@ -125,6 +125,10 @@ public class ChemicalReactionRecipe
         return energyRequired;
     }
 
+    public int getCircuitType() {
+        return circuitType;
+    }
+
     public EnumSet<ReactionCondition> getConditions() {
         return conditions;
     }
@@ -134,9 +138,9 @@ public class ChemicalReactionRecipe
      *
      * @return Representation of the output, <strong>MUST NOT</strong> be modified.
      */
-    public List<ChemicalReactionRecipeOutput> getOutputDefinition() {
+    public List<ChemicalReactionRecipeJEIOutput> getOutputDefinition() {
         return List.of(
-                new ChemicalReactionRecipeOutput(outputItems, outputFluids, outputGases, outputInfusions, outputPigments, outputSlurries)
+                new ChemicalReactionRecipeJEIOutput(outputItems, outputFluids, outputGases, outputInfusions, outputPigments, outputSlurries)
         );
     }
 
@@ -150,10 +154,10 @@ public class ChemicalReactionRecipe
      * @implNote The passed in inputs should <strong>NOT</strong> be modified.
      */
     @Contract(value = "_, _, _, _, _, _ -> new", pure = true)
-    public ChemicalReactionRecipeOutput getOutput(Set<@NotNull ItemStack> itemStacks, Set<@NotNull FluidStack> fluidStacks,
-                                                  Set<@NotNull GasStack> gasStacks, Set<@NotNull InfusionStack> infusionStacks,
-                                                  Set<@NotNull PigmentStack> pigmentStacks, Set<@NotNull SlurryStack> slurryStacks) {
-        return new ChemicalReactionRecipeOutput(outputItems, outputFluids, outputGases, outputInfusions, outputPigments, outputSlurries);
+    public ChemicalReactionRecipeJEIOutput getOutput(Set<@NotNull ItemStack> itemStacks, Set<@NotNull FluidStack> fluidStacks,
+                                                     Set<@NotNull GasStack> gasStacks, Set<@NotNull InfusionStack> infusionStacks,
+                                                     Set<@NotNull PigmentStack> pigmentStacks, Set<@NotNull SlurryStack> slurryStacks) {
+        return new ChemicalReactionRecipeJEIOutput(outputItems, outputFluids, outputGases, outputInfusions, outputPigments, outputSlurries);
     }
 
     @Override
@@ -168,6 +172,7 @@ public class ChemicalReactionRecipe
 
     @Override
     public void write(FriendlyByteBuf buffer) {
+        buffer.writeInt(circuitType);
         buffer.writeVarInt(inputItems.size());
         inputItems.forEach(i -> i.write(buffer));
         buffer.writeVarInt(inputFluids.size());
@@ -217,90 +222,39 @@ public class ChemicalReactionRecipe
                 inputSlurries.stream().anyMatch(InputIngredient::hasNoMatchingInstances);
     }
 
-    @Override
-    public boolean test(Set<@NotNull ItemStack> itemStacks,
-                        Set<@NotNull FluidStack> fluidStacks,
-                        Set<@NotNull GasStack> gasStacks,
-                        Set<@NotNull InfusionStack> infusionStacks,
-                        Set<@NotNull PigmentStack> pigmentStacks,
-                        Set<@NotNull SlurryStack> slurryStacks) {
-        return uniqueMatch(inputItems, itemStacks) &&
-                uniqueMatch(inputFluids, fluidStacks) &&
-                uniqueMatch(inputGases, gasStacks) &&
-                uniqueMatch(inputInfusions, infusionStacks) &&
-                uniqueMatch(inputPigments, pigmentStacks) &&
-                uniqueMatch(inputSlurries, slurryStacks);
-    }
-
-    /**
-     * Checks if there exists a perfect bijective matching between predicates
-     * and elements where each predicate matches exactly one unique element
-     * <b>and</b> each element is matched by exactly one predicate.
-     *
-     * @param predicates The set of predicates to test
-     * @param ts         The set of elements to test against
-     * @param <T>        The type of elements being tested
-     * @return true if a perfect bijective match exists, false otherwise
-     */
-    private static <T> boolean uniqueMatch(Set<? extends Predicate<T>> predicates, Set<T> ts) {
-        // Must have equal sizes for bijective mapping
-        if (predicates.size() != ts.size()) {
-            return false;
-        }
-
-        // Precompute all matching relationships
-        Map<T, List<Predicate<T>>> elementToPredicates = new HashMap<>();
-        Map<Predicate<T>, List<T>> predicateToElements = new HashMap<>();
-
-        // Build mapping from elements to matching predicates
-        for (T element : ts) {
-            List<Predicate<T>> matches = predicates.stream()
-                    .filter(p -> p.test(element))
-                    .collect(Collectors.toList());
-            if (matches.isEmpty()) {
-                return false; // Element not matched by any predicate
-            }
-            elementToPredicates.put(element, matches);
-        }
-
-        // Build mapping from predicates to matching elements
-        for (Predicate<T> predicate : predicates) {
-            List<T> matches = ts.stream()
-                    .filter(predicate)
-                    .collect(Collectors.toList());
-            if (matches.isEmpty()) {
-                return false; // Predicate doesn't match any element
-            }
-            predicateToElements.put(predicate, matches);
-        }
-
-        // Find unique matches using greedy algorithm
-        Set<T> matchedElements = new HashSet<>();
-        for (Predicate<T> predicate : predicates) {
-            // Find element that is only matched by this predicate
-            Optional<T> uniqueMatch = predicateToElements.get(predicate).stream()
-                    .filter(e -> elementToPredicates.get(e).size() == 1)
-                    .filter(e -> !matchedElements.contains(e))
-                    .findFirst();
-            if (uniqueMatch.isEmpty()) {
-                return false;
-            }
-            matchedElements.add(uniqueMatch.get());
-        }
-
-        return true;
-    }
-
     /**
      * @apiNote Though not explicitly checked, at least one output must be
      * non-empty. Also, no null values are allowed. Use empty stacks or sets
      * instead.
      */
-    public record ChemicalReactionRecipeOutput(@NotNull Set<@NotNull ItemStack> outputItems,
-                                               @NotNull Set<@NotNull FluidStack> outputFluids,
-                                               @NotNull Set<@NotNull GasStack> outputGases,
-                                               @NotNull Set<@NotNull InfusionStack> outputInfusions,
-                                               @NotNull Set<@NotNull PigmentStack> outputPigments,
-                                               @NotNull Set<@NotNull SlurryStack> outputSlurries) {
+    public record ChemicalReactionRecipeJEIOutput(@NotNull Set<@NotNull ItemStack> outputItems,
+                                                  @NotNull Set<@NotNull FluidStack> outputFluids,
+                                                  @NotNull Set<@NotNull GasStack> outputGases,
+                                                  @NotNull Set<@NotNull InfusionStack> outputInfusions,
+                                                  @NotNull Set<@NotNull PigmentStack> outputPigments,
+                                                  @NotNull Set<@NotNull SlurryStack> outputSlurries) {
+    }
+
+    /**
+     * @apiNote Though this record has the same structure with {@link ChemicalReactionRecipeJEIOutput},
+     * its fields have to be declared to be lists. We need to search the stacks
+     * to consume in the order from the first slot or tank to the last, which
+     * requires them to be ordered.
+     */
+    public record ChemicalReactionRecipeInput(@NotNull List<@NotNull ItemStack> itemStacks,
+                                              @NotNull List<@NotNull FluidStack> fluidStacks,
+                                              @NotNull List<@NotNull GasStack> gasStacks,
+                                              @NotNull List<@NotNull InfusionStack> infusionStacks,
+                                              @NotNull List<@NotNull PigmentStack> pigmentStacks,
+                                              @NotNull List<@NotNull SlurryStack> slurryStacks) {
+
+        public static final ChemicalReactionRecipeInput INVALID_INPUT = new ChemicalReactionRecipeInput(
+                List.of(), List.of(), List.of(), List.of(), List.of(), List.of()
+        );
+
+        public boolean invalid() {
+            return (this == INVALID_INPUT) || (itemStacks.isEmpty() && fluidStacks.isEmpty() && gasStacks.isEmpty()
+                    && infusionStacks.isEmpty() && pigmentStacks.isEmpty() && slurryStacks.isEmpty());
+        }
     }
 }

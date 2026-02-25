@@ -17,6 +17,6 @@ public interface ExtraAttribute extends Attribute {
     @Nullable
     static AdvancedTier getAdvanceTier(Block block) {
         ExtraAttributeTier<?> attr = Attribute.get(block, ExtraAttributeTier.class);
-        return attr == null ? null : attr.tier().getAdvanceTier();
+        return attr == null ? null : attr.tier().getAdvancedTier();
     }
 }
